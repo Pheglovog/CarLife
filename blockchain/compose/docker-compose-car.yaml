@@ -1,0 +1,631 @@
+version: '3.7'
+
+volumes:
+  #component_supplier
+  orderer1.component_supplier.carlife.com:
+  cartire.component_supplier.carlife.com:
+  carbody.component_supplier.carlife.com:
+  carinterior.component_supplier.carlife.com:
+  #manufacturer
+  orderer2.manufacturer.carlife.com:
+  factory1.manufacturer.carlife.com:
+  factory2.manufacturer.carlife.com:
+  #store
+  sailer1.store.carlife.com:
+  sailer2.store.carlife.com:
+  #insurer
+  orderer3.insurer.carlife.com:
+  pcompany.insurer.carlife.com:
+  rcompany.insurer.carlife.com:
+  #maintenancer
+  fixer1.maintenancer.carlife.com:
+  fixer2.maintenancer.carlife.com:
+  #consumer
+  user1.consumer.carlife.com:
+  user2.consumer.carlife.com:
+
+networks:
+  test:
+    name: carlife
+
+services:
+  #=========================component_supplier====================================================================================
+  orderer1.component_supplier.carlife.com:
+    container_name: orderer1.component_supplier.carlife.com
+    image: hyperledger/fabric-orderer:latest
+    labels:
+      service: hyperledger-fabric
+    environment:
+      - FABRIC_LOGGING_SPEC=INFO
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_LISTENPORT=7050
+      - ORDERER_GENERAL_LOCALMSPID=ComponentSupplierMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      # enabled TLS
+      - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      - ORDERER_GENERAL_CLUSTER_CLIENTCERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_CLUSTER_CLIENTPRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_CLUSTER_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      - ORDERER_GENERAL_BOOTSTRAPMETHOD=none
+      - ORDERER_CHANNELPARTICIPATION_ENABLED=true
+      - ORDERER_ADMIN_TLS_ENABLED=true
+      - ORDERER_ADMIN_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_ADMIN_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_ADMIN_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      - ORDERER_ADMIN_TLS_CLIENTROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      - ORDERER_ADMIN_LISTENADDRESS=0.0.0.0:8050
+      - ORDERER_OPERATIONS_LISTENADDRESS=orderer1.component_supplier.carlife.com:9050
+      - ORDERER_METRICS_PROVIDER=prometheus
+    working_dir: /root
+    command: orderer
+    volumes:
+      - ../organizations/component_supplier.carlife.com/orderers/orderer1.component_supplier.carlife.com/msp:/var/hyperledger/orderer/msp
+      - ../organizations/component_supplier.carlife.com/orderers/orderer1.component_supplier.carlife.com/tls/:/var/hyperledger/orderer/tls
+      - orderer1.component_supplier.carlife.com:/var/hyperledger/production/orderer
+    ports:
+      - 7050:7050
+      - 8050:8050
+      - 9050:9050
+    networks:
+      - carlife
+
+
+  cartire.component_supplier.carlife.com:
+    container_name: cartire.component_supplier.carlife.com
+    image: hyperledger/fabric-peer:latest
+    labels:
+      service: hyperledger-fabric
+    environment:
+      - FABRIC_CFG_PATH=/etc/hyperledger/peercfg
+      - FABRIC_LOGGING_SPEC=INFO
+      #- FABRIC_LOGGING_SPEC=DEBUG
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_PROFILE_ENABLED=false
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      # Peer specific variables
+      - CORE_PEER_ID=cartire.component_supplier.carlife.com
+      - CORE_PEER_ADDRESS=cartire.component_supplier.carlife.com:7051
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:7051
+      - CORE_PEER_CHAINCODEADDRESS=cartire.component_supplier.carlife.com:8051
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:8051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=cartire.component_supplier.carlife.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=cartire.component_supplier.carlife.com:7051
+      - CORE_PEER_LOCALMSPID=ComponentSupplierMSP
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
+      - CORE_OPERATIONS_LISTENADDRESS=cartire.component_supplier.carlife.com:9051
+      - CORE_METRICS_PROVIDER=prometheus
+      - CHAINCODE_AS_A_SERVICE_BUILDER_CONFIG={"peername":"cartire_component_supplier"}
+      - CORE_CHAINCODE_EXECUTETIMEOUT=300s
+    volumes:
+      - ../organizations/component_supplier.carlife.com/peers/cartire.component_supplier.carlife.com:/etc/hyperledger/fabric
+      - cartire.component_supplier.carlife.com:/var/hyperledger/production
+    working_dir: /root
+    command: peer node start
+    ports:
+      - 7051:7051
+      - 8051:8051
+    networks:
+      - carlife
+
+  carbody.component_supplier.carlife.com:
+    container_name: carbody.component_supplier.carlife.com
+    image: hyperledger/fabric-peer:latest
+    labels:
+      service: hyperledger-fabric
+    environment:
+      - FABRIC_CFG_PATH=/etc/hyperledger/peercfg
+      - FABRIC_LOGGING_SPEC=INFO
+      #- FABRIC_LOGGING_SPEC=DEBUG
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_PROFILE_ENABLED=false
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      # Peer specific variables
+      - CORE_PEER_ID=carbody.component_supplier.carlife.com
+      - CORE_PEER_ADDRESS=carbody.component_supplier.carlife.com:7052
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:7052
+      - CORE_PEER_CHAINCODEADDRESS=carbody.component_supplier.carlife.com:8052
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:8052
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=carbody.component_supplier.carlife.com:7052
+      - CORE_PEER_GOSSIP_BOOTSTRAP=carbody.component_supplier.carlife.com:7052
+      - CORE_PEER_LOCALMSPID=ComponentSupplierMSP
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
+      - CORE_OPERATIONS_LISTENADDRESS=carbody.component_supplier.carlife.com:9052
+      - CORE_METRICS_PROVIDER=prometheus
+      - CHAINCODE_AS_A_SERVICE_BUILDER_CONFIG={"peername":"carbody_component_supplier"}
+      - CORE_CHAINCODE_EXECUTETIMEOUT=300s
+    volumes:
+      - ../organizations/component_supplier.carlife.com/peers/carbody.component_supplier.carlife.com:/etc/hyperledger/fabric
+      - carbody.component_supplier.carlife.com:/var/hyperledger/production
+    working_dir: /root
+    command: peer node start
+    ports:
+      - 7052:7052
+      - 8052:8052
+    networks:
+      - carlife
+
+  carinterior.component_supplier.carlife.com:
+    container_name: carinterior.component_supplier.carlife.com
+    image: hyperledger/fabric-peer:latest
+    labels:
+      service: hyperledger-fabric
+    environment:
+      - FABRIC_CFG_PATH=/etc/hyperledger/peercfg
+      - FABRIC_LOGGING_SPEC=INFO
+      #- FABRIC_LOGGING_SPEC=DEBUG
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_PROFILE_ENABLED=false
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      # Peer specific variables
+      - CORE_PEER_ID=carinterior.component_supplier.carlife.com
+      - CORE_PEER_ADDRESS=carinterior.component_supplier.carlife.com:7053
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:7053
+      - CORE_PEER_CHAINCODEADDRESS=carinterior.component_supplier.carlife.com:8053
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:8053
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=carinterior.component_supplier.carlife.com:7053
+      - CORE_PEER_GOSSIP_BOOTSTRAP=carinterior.component_supplier.carlife.com:7053
+      - CORE_PEER_LOCALMSPID=ComponentSupplierMSP
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
+      - CORE_OPERATIONS_LISTENADDRESS=carinterior.component_supplier.carlife.com:9053
+      - CORE_METRICS_PROVIDER=prometheus
+      - CHAINCODE_AS_A_SERVICE_BUILDER_CONFIG={"peername":"carinterior_component_supplier"}
+      - CORE_CHAINCODE_EXECUTETIMEOUT=300s
+    volumes:
+      - ../organizations/component_supplier.carlife.com/peers/carinterior.component_supplier.carlife.com:/etc/hyperledger/fabric
+      - carinterior.component_supplier.carlife.com:/var/hyperledger/production
+    working_dir: /root
+    command: peer node start
+    ports:
+      - 7053:7053
+      - 8053:8053
+    networks:
+      - carlife
+
+  #=========================manufacturer==========================================================================================
+  orderer2.manufacturer.carlife.com:
+    container_name: orderer2.manufacturer.carlife.com
+    image: hyperledger/fabric-orderer:latest
+    labels:
+      service: hyperledger-fabric
+    environment:
+      - FABRIC_LOGGING_SPEC=INFO
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_LISTENPORT=7054
+      - ORDERER_GENERAL_LOCALMSPID=ManufacturerMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      # enabled TLS
+      - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      - ORDERER_GENERAL_CLUSTER_CLIENTCERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_CLUSTER_CLIENTPRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_CLUSTER_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      - ORDERER_GENERAL_BOOTSTRAPMETHOD=none
+      - ORDERER_CHANNELPARTICIPATION_ENABLED=true
+      - ORDERER_ADMIN_TLS_ENABLED=true
+      - ORDERER_ADMIN_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_ADMIN_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_ADMIN_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      - ORDERER_ADMIN_TLS_CLIENTROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      - ORDERER_ADMIN_LISTENADDRESS=0.0.0.0:8054
+      - ORDERER_OPERATIONS_LISTENADDRESS=orderer2.manufacturer.carlife.com:9054
+      - ORDERER_METRICS_PROVIDER=prometheus
+    working_dir: /root
+    command: orderer
+    volumes:
+      - ../organizations/manufacturer.carlife.com/orderers/orderer2.manufacturer.carlife.com/msp:/var/hyperledger/orderer/msp
+      - ../organizations/manufacturer.carlife.com/orderers/orderer2.manufacturer.carlife.com/tls/:/var/hyperledger/orderer/tls
+      - orderer2.manufacturer.carlife.com:/var/hyperledger/production/orderer
+    ports:
+      - 7054:7054
+      - 8054:8054
+      - 9054:9054
+    networks:
+      - carlife
+
+  factory1.manufacturer.carlife.com:
+    container_name: factory1.manufacturer.carlife.com
+    image: hyperledger/fabric-peer:latest
+    labels:
+      service: hyperledger-fabric
+    environment:
+      - FABRIC_CFG_PATH=/etc/hyperledger/peercfg
+      - FABRIC_LOGGING_SPEC=INFO
+      #- FABRIC_LOGGING_SPEC=DEBUG
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_PROFILE_ENABLED=false
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      # Peer specific variables
+      - CORE_PEER_ID=factory1.manufacturer.carlife.com
+      - CORE_PEER_ADDRESS=factory1.manufacturer.carlife.com:7055
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:7055
+      - CORE_PEER_CHAINCODEADDRESS=factory1.manufacturer.carlife.com:8055
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:8055
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=factory1.manufacturer.carlife.com:7055
+      - CORE_PEER_GOSSIP_BOOTSTRAP=factory1.manufacturer.carlife.com:7055
+      - CORE_PEER_LOCALMSPID=ManufacturerMSP
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
+      - CORE_OPERATIONS_LISTENADDRESS=factory1.manufacturer.carlife.com:9055
+      - CORE_METRICS_PROVIDER=prometheus
+      - CHAINCODE_AS_A_SERVICE_BUILDER_CONFIG={"peername":"factory1_manufacturer"}
+      - CORE_CHAINCODE_EXECUTETIMEOUT=300s
+    volumes:
+      - ../organizations/manufacturer.carlife.com/peers/factory1.manufacturer.carlife.com:/etc/hyperledger/fabric
+      - factory1.manufacturer.carlife.com:/var/hyperledger/production
+    working_dir: /root
+    command: peer node start
+    ports:
+      - 7055:7055
+      - 8055:8055
+    networks:
+      - carlife
+  factory2.manufacturer.carlife.com:
+    container_name: factory2.manufacturer.carlife.com
+    image: hyperledger/fabric-peer:latest
+    labels:
+      service: hyperledger-fabric
+    environment:
+      - FABRIC_CFG_PATH=/etc/hyperledger/peercfg
+      - FABRIC_LOGGING_SPEC=INFO
+      #- FABRIC_LOGGING_SPEC=DEBUG
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_PROFILE_ENABLED=false
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      # Peer specific variables
+      - CORE_PEER_ID=factory2.manufacturer.carlife.com
+      - CORE_PEER_ADDRESS=factory2.manufacturer.carlife.com:7056
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:7056
+      - CORE_PEER_CHAINCODEADDRESS=factory2.manufacturer.carlife.com:8056
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:8056
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=factory2.manufacturer.carlife.com:7056
+      - CORE_PEER_GOSSIP_BOOTSTRAP=factory2.manufacturer.carlife.com:7056
+      - CORE_PEER_LOCALMSPID=ManufacturerMSP
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
+      - CORE_OPERATIONS_LISTENADDRESS=factory2.manufacturer.carlife.com:9056
+      - CORE_METRICS_PROVIDER=prometheus
+      - CHAINCODE_AS_A_SERVICE_BUILDER_CONFIG={"peername":"factory2_manufacturer"}
+      - CORE_CHAINCODE_EXECUTETIMEOUT=300s
+    volumes:
+      - ../organizations/manufacturer.carlife.com/peers/factory2.manufacturer.carlife.com:/etc/hyperledger/fabric
+      - factory2.manufacturer.carlife.com:/var/hyperledger/production
+    working_dir: /root
+    command: peer node start
+    ports:
+      - 7055:7055
+      - 8055:8055
+    networks:
+      - carlife
+
+#=========================store===================================================================================================
+  sailer1.store.carlife.com:
+    container_name: sailer1.store.carlife.com
+    image: hyperledger/fabric-peer:latest
+    labels:
+      service: hyperledger-fabric
+    environment:
+      - FABRIC_CFG_PATH=/etc/hyperledger/peercfg
+      - FABRIC_LOGGING_SPEC=INFO
+      #- FABRIC_LOGGING_SPEC=DEBUG
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_PROFILE_ENABLED=false
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      # Peer specific variables
+      - CORE_PEER_ID=sailer1.store.carlife.com
+      - CORE_PEER_ADDRESS=sailer1.store.carlife.com:7057
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:7057
+      - CORE_PEER_CHAINCODEADDRESS=sailer1.store.carlife.com:8057
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:8057
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=sailer1.store.carlife.com:7057
+      - CORE_PEER_GOSSIP_BOOTSTRAP=sailer1.store.carlife.com:7057
+      - CORE_PEER_LOCALMSPID=StoreMSP
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
+      - CORE_OPERATIONS_LISTENADDRESS=sailer1.store.carlife.com:9057
+      - CORE_METRICS_PROVIDER=prometheus
+      - CHAINCODE_AS_A_SERVICE_BUILDER_CONFIG={"peername":"sailer1_store"}
+      - CORE_CHAINCODE_EXECUTETIMEOUT=300s
+    volumes:
+      - ../organizations/store.carlife.com/peers/sailer1.store.carlife.com:/etc/hyperledger/fabric
+      - sailer1.store.carlife.com:/var/hyperledger/production
+    working_dir: /root
+    command: peer node start
+    ports:
+      - 7057:7057
+      - 8057:8057
+    networks:
+      - carlife
+
+  sailer2.store.carlife.com:
+    container_name: sailer2.store.carlife.com
+    image: hyperledger/fabric-peer:latest
+    labels:
+      service: hyperledger-fabric
+    environment:
+      - FABRIC_CFG_PATH=/etc/hyperledger/peercfg
+      - FABRIC_LOGGING_SPEC=INFO
+      #- FABRIC_LOGGING_SPEC=DEBUG
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_PROFILE_ENABLED=false
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      # Peer specific variables
+      - CORE_PEER_ID=sailer2.store.carlife.com
+      - CORE_PEER_ADDRESS=sailer2.store.carlife.com:7058
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:7058
+      - CORE_PEER_CHAINCODEADDRESS=sailer2.store.carlife.com:8058
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:8058
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=sailer2.store.carlife.com:7058
+      - CORE_PEER_GOSSIP_BOOTSTRAP=sailer2.store.carlife.com:7058
+      - CORE_PEER_LOCALMSPID=StoreMSP
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
+      - CORE_OPERATIONS_LISTENADDRESS=sailer2.store.carlife.com:9058
+      - CORE_METRICS_PROVIDER=prometheus
+      - CHAINCODE_AS_A_SERVICE_BUILDER_CONFIG={"peername":"sailer2_store"}
+      - CORE_CHAINCODE_EXECUTETIMEOUT=300s
+    volumes:
+      - ../organizations/store.carlife.com/peers/sailer2.store.carlife.com:/etc/hyperledger/fabric
+      - sailer2.store.carlife.com:/var/hyperledger/production
+    working_dir: /root
+    command: peer node start
+    ports:
+      - 7058:7058
+      - 8058:8058
+    networks:
+      - carlife
+
+
+#=========================insurer=================================================================================================
+  orderer3.insurer.carlife.com:
+    container_name: orderer3.insurer.carlife.com
+    image: hyperledger/fabric-orderer:latest
+    labels:
+      service: hyperledger-fabric
+    environment:
+      - FABRIC_LOGGING_SPEC=INFO
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_LISTENPORT=7059
+      - ORDERER_GENERAL_LOCALMSPID=InsurerMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      # enabled TLS
+      - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      - ORDERER_GENERAL_CLUSTER_CLIENTCERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_CLUSTER_CLIENTPRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_CLUSTER_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      - ORDERER_GENERAL_BOOTSTRAPMETHOD=none
+      - ORDERER_CHANNELPARTICIPATION_ENABLED=true
+      - ORDERER_ADMIN_TLS_ENABLED=true
+      - ORDERER_ADMIN_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_ADMIN_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_ADMIN_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      - ORDERER_ADMIN_TLS_CLIENTROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      - ORDERER_ADMIN_LISTENADDRESS=0.0.0.0:8059
+      - ORDERER_OPERATIONS_LISTENADDRESS=orderer3.insurer.carlife.com:9059
+      - ORDERER_METRICS_PROVIDER=prometheus
+    working_dir: /root
+    command: orderer
+    volumes:
+      - ../organizations/insurer.carlife.com/orderers/orderer3.insurer.carlife.com/msp:/var/hyperledger/orderer/msp
+      - ../organizations/insurer.carlife.com/orderers/orderer3.insurer.carlife.com/tls/:/var/hyperledger/orderer/tls
+      - orderer3.insurer.carlife.com:/var/hyperledger/production/orderer
+    ports:
+      - 7059:7059
+      - 8059:8059
+      - 9059:9059
+    networks:
+      - carlife
+
+  pcompany.insurer.carlife.com:
+    container_name: pcompany.insurer.carlife.com
+    image: hyperledger/fabric-peer:latest
+    labels:
+      service: hyperledger-fabric
+    environment:
+      - FABRIC_CFG_PATH=/etc/hyperledger/peercfg
+      - FABRIC_LOGGING_SPEC=INFO
+      #- FABRIC_LOGGING_SPEC=DEBUG
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_PROFILE_ENABLED=false
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      # Peer specific variables
+      - CORE_PEER_ID=pcompany.insurer.carlife.com
+      - CORE_PEER_ADDRESS=pcompany.insurer.carlife.com:7060
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:7060
+      - CORE_PEER_CHAINCODEADDRESS=pcompany.insurer.carlife.com:8060
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:8060
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=pcompany.insurer.carlife.com:7060
+      - CORE_PEER_GOSSIP_BOOTSTRAP=pcompany.insurer.carlife.com:7060
+      - CORE_PEER_LOCALMSPID=InsurerMSP
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
+      - CORE_OPERATIONS_LISTENADDRESS=pcompany.insurer.carlife.com:9060
+      - CORE_METRICS_PROVIDER=prometheus
+      - CHAINCODE_AS_A_SERVICE_BUILDER_CONFIG={"peername":"pcompany_insurer"}
+      - CORE_CHAINCODE_EXECUTETIMEOUT=300s
+    volumes:
+      - ../organizations/insurer.carlife.com/peers/pcompany.insurer.carlife.com:/etc/hyperledger/fabric
+      - pcompany.insurer.carlife.com:/var/hyperledger/production
+    working_dir: /root
+    command: peer node start
+    ports:
+      - 7060:7060
+      - 8060:8060
+    networks:
+      - carlife
+
+  rcompany.insurer.carlife.com:
+    container_name: rcompany.insurer.carlife.com
+    image: hyperledger/fabric-peer:latest
+    labels:
+      service: hyperledger-fabric
+    environment:
+      - FABRIC_CFG_PATH=/etc/hyperledger/peercfg
+      - FABRIC_LOGGING_SPEC=INFO
+      #- FABRIC_LOGGING_SPEC=DEBUG
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_PROFILE_ENABLED=false
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      # Peer specific variables
+      - CORE_PEER_ID=rcompany.insurer.carlife.com
+      - CORE_PEER_ADDRESS=rcompany.insurer.carlife.com:7061
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:7061
+      - CORE_PEER_CHAINCODEADDRESS=rcompany.insurer.carlife.com:8061
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:8061
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=rcompany.insurer.carlife.com:7061
+      - CORE_PEER_GOSSIP_BOOTSTRAP=rcompany.insurer.carlife.com:7061
+      - CORE_PEER_LOCALMSPID=InsurerMSP
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
+      - CORE_OPERATIONS_LISTENADDRESS=rcompany.insurer.carlife.com:9061
+      - CORE_METRICS_PROVIDER=prometheus
+      - CHAINCODE_AS_A_SERVICE_BUILDER_CONFIG={"peername":"rcompany_insurer"}
+      - CORE_CHAINCODE_EXECUTETIMEOUT=300s
+    volumes:
+      - ../organizations/insurer.carlife.com/peers/rcompany.insurer.carlife.com:/etc/hyperledger/fabric
+      - rcompany.insurer.carlife.com:/var/hyperledger/production
+    working_dir: /root
+    command: peer node start
+    ports:
+      - 7061:7061
+      - 8061:8061
+    networks:
+      - carlife
+
+#=========================maintenancer============================================================================================
+  fixer1.maintenancer.carlife.com:
+    container_name: fixer1.maintenancer.carlife.com
+    image: hyperledger/fabric-peer:latest
+    labels:
+      service: hyperledger-fabric
+    environment:
+      - FABRIC_CFG_PATH=/etc/hyperledger/peercfg
+      - FABRIC_LOGGING_SPEC=INFO
+      #- FABRIC_LOGGING_SPEC=DEBUG
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_PROFILE_ENABLED=false
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      # Peer specific variables
+      - CORE_PEER_ID=fixer1.maintenancer.carlife.com
+      - CORE_PEER_ADDRESS=fixer1.maintenancer.carlife.com:7062
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:7062
+      - CORE_PEER_CHAINCODEADDRESS=fixer1.maintenancer.carlife.com:8062
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:8062
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=fixer1.maintenancer.carlife.com:7062
+      - CORE_PEER_GOSSIP_BOOTSTRAP=fixer1.maintenancer.carlife.com:7062
+      - CORE_PEER_LOCALMSPID=MaintenancerMSP
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
+      - CORE_OPERATIONS_LISTENADDRESS=fixer1.maintenancer.carlife.com:9062
+      - CORE_METRICS_PROVIDER=prometheus
+      - CHAINCODE_AS_A_SERVICE_BUILDER_CONFIG={"peername":"fixer1_maintenancer"}
+      - CORE_CHAINCODE_EXECUTETIMEOUT=300s
+    volumes:
+      - ../organizations/maintenancer.carlife.com/peers/fixer1.maintenancer.carlife.com:/etc/hyperledger/fabric
+      - fixer1.maintenancer.carlife.com:/var/hyperledger/production
+    working_dir: /root
+    command: peer node start
+    ports:
+      - 7062:7062
+      - 8062:8062
+    networks:
+      - carlife
+
+  fixer2.maintenancer.carlife.com:
+    container_name: fixer2.maintenancer.carlife.com
+    image: hyperledger/fabric-peer:latest
+    labels:
+      service: hyperledger-fabric
+    environment:
+      - FABRIC_CFG_PATH=/etc/hyperledger/peercfg
+      - FABRIC_LOGGING_SPEC=INFO
+      #- FABRIC_LOGGING_SPEC=DEBUG
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_PROFILE_ENABLED=false
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      # Peer specific variables
+      - CORE_PEER_ID=fixer2.maintenancer.carlife.com
+      - CORE_PEER_ADDRESS=fixer2.maintenancer.carlife.com:7063
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:7063
+      - CORE_PEER_CHAINCODEADDRESS=fixer2.maintenancer.carlife.com:8063
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:8063
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=fixer2.maintenancer.carlife.com:7063
+      - CORE_PEER_GOSSIP_BOOTSTRAP=fixer2.maintenancer.carlife.com:7063
+      - CORE_PEER_LOCALMSPID=MaintenancerMSP
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
+      - CORE_OPERATIONS_LISTENADDRESS=fixer2.maintenancer.carlife.com:9063
+      - CORE_METRICS_PROVIDER=prometheus
+      - CHAINCODE_AS_A_SERVICE_BUILDER_CONFIG={"peername":"fixer2_maintenancer"}
+      - CORE_CHAINCODE_EXECUTETIMEOUT=300s
+    volumes:
+      - ../organizations/maintenancer.carlife.com/peers/fixer2.maintenancer.carlife.com:/etc/hyperledger/fabric
+      - fixer2.maintenancer.carlife.com:/var/hyperledger/production
+    working_dir: /root
+    command: peer node start
+    ports:
+      - 7063:7063
+      - 8063:8063
+    networks:
+      - carlife
+
+#=========================consumer================================================================================================
+  user1.consumer.carlife.com:
+    container_name: user1.consumer.carlife.com
+    image: hyperledger/fabric-peer:latest
+    labels:
+      service: hyperledger-fabric
+    environment:
+      - FABRIC_CFG_PATH=/etc/hyperledger/peercfg
+      - FABRIC_LOGGING_SPEC=INFO
+      #- FABRIC_LOGGING_SPEC=DEBUG
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_PROFILE_ENABLED=false
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      # Peer specific variables
+      - CORE_PEER_ID=user1.consumer.carlife.com
+      - CORE_PEER_ADDRESS=user1.consumer.carlife.com:7064
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:7064
+      - CORE_PEER_CHAINCODEADDRESS=user1.consumer.carlife.com:8064
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:8064
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=user1.consumer.carlife.com:7064
+      - CORE_PEER_GOSSIP_BOOTSTRAP=user1.consumer.carlife.com:7064
+      - CORE_PEER_LOCALMSPID=ConsumerMSP
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
+      - CORE_OPERATIONS_LISTENADDRESS=user1.consumer.carlife.com:9064
+      - CORE_METRICS_PROVIDER=prometheus
+      - CHAINCODE_AS_A_SERVICE_BUILDER_CONFIG={"peername":"user1_consumer"}
+      - CORE_CHAINCODE_EXECUTETIMEOUT=300s
+    volumes:
+      - ../organizations/consumer.carlife.com/peers/user1.consumer.carlife.com:/etc/hyperledger/fabric
+      - user1.consumer.carlife.com:/var/hyperledger/production
+    working_dir: /root
+    command: peer node start
+    ports:
+      - 7064:7064
+      - 8064:8064
+    networks:
+      - carlife
