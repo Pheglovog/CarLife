@@ -1,0 +1,327 @@
+################################################################################
+#
+#   Section: Organizations
+#
+#   - This section defines the different organizational identities which will
+#   be referenced later in the configuration.
+#
+################################################################################
+Organizations:
+  - &OrgComponentSupplier
+    Name: OrgComponentSupplier
+    ID: ComponentSupplierMSP
+    MSPDir: ../organizations/component_supplier.carlife.com/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('ComponentSupplierMSP.admin', 'ComponentSupplierMSP.peer', 'ComponentSupplierMSP.client')"
+      Writers:
+        Type: Signature
+        Rule: "OR('ComponentSupplierMSP.admin', 'ComponentSupplierMSP.client')"
+      Admins:
+        Type: Signature
+        Rule: "OR('ComponentSupplierMSP.admin')"
+      Endorsement:
+        Type: Signature
+        Rule: "OR('ComponentSupplierMSP.peer')"
+    OrdererEndpoints:
+      - orderer1.component_supplier.carlife.com:7050
+  - &OrgManufacturer
+    Name: OrgManufacturer
+    ID: ManufacturerMSP
+    MSPDir: ../organizations/manufacturer.carlife.com/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('ManufacturerMSP.admin', 'ManufacturerMSP.peer', 'ManufacturerMSP.client')"
+      Writers:
+        Type: Signature
+        Rule: "OR('ManufacturerMSP.admin', 'ManufacturerMSP.client')"
+      Admins:
+        Type: Signature
+        Rule: "OR('ManufacturerMSP.admin')"
+      Endorsement:
+        Type: Signature
+        Rule: "OR('ManufacturerMSP.peer')"
+    OrdererEndpoints:
+      - orderer2.manufacturer.carlife.com:7054
+  - &OrgStore
+    Name: OrgStore
+    ID: StoreMSP
+    MSPDir: ../organizations/store.carlife.com/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('StoreMSP.admin', 'StoreMSP.peer', 'StoreMSP.client')"
+      Writers:
+        Type: Signature
+        Rule: "OR('StoreMSP.admin', 'StoreMSP.client')"
+      Admins:
+        Type: Signature
+        Rule: "OR('StoreMSP.admin')"
+      Endorsement:
+        Type: Signature
+        Rule: "OR('StoreMSP.peer')"
+  - &OrgInsurer
+    Name: OrgInsurer
+    ID: InsurerMSP
+    MSPDir: ../organizations/insurer.carlife.com/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('InsurerMSP.admin', 'InsurerMSP.peer', 'InsurerMSP.client')"
+      Writers:
+        Type: Signature
+        Rule: "OR('InsurerMSP.admin', 'InsurerMSP.client')"
+      Admins:
+        Type: Signature
+        Rule: "OR('InsurerMSP.admin')"
+      Endorsement:
+        Type: Signature
+        Rule: "OR('InsurerMSP.peer')"
+    OrdererEndpoints:
+      - orderer3.insurer.carlife.com:7059
+  - &OrgMaintenancer
+    Name: OrgMaintenancer
+    ID: MaintenancerMSP
+    MSPDir: ../organizations/maintenancer.carlife.com/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('MaintenancerMSP.admin', 'MaintenancerMSP.peer', 'MaintenancerMSP.client')"
+      Writers:
+        Type: Signature
+        Rule: "OR('MaintenancerMSP.admin', 'MaintenancerMSP.client')"
+      Admins:
+        Type: Signature
+        Rule: "OR('MaintenancerMSP.admin')"
+      Endorsement:
+        Type: Signature
+        Rule: "OR('MaintenancerMSP.peer')"
+  - &OrgConsumer
+    Name: OrgConsumer
+    ID: ConsumerMSP
+    MSPDir: ../organizations/consumer.carlife.com/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('ConsumerMSP.admin', 'ConsumerMSP.peer', 'ConsumerMSP.client')"
+      Writers:
+        Type: Signature
+        Rule: "OR('ConsumerMSP.admin', 'ConsumerMSP.client')"
+      Admins:
+        Type: Signature
+        Rule: "OR('ConsumerMSP.admin')"
+      Endorsement:
+        Type: Signature
+        Rule: "OR('ConsumerMSP.peer')"
+
+################################################################################
+#
+#   SECTION: Capabilities
+#
+#   - This section defines the capabilities of fabric network. This is a new
+#   concept as of v1.1.0 and should not be utilized in mixed networks with
+#   v1.0.x peers and orderers.  Capabilities define features which must be
+#   present in a fabric binary for that binary to safely participate in the
+#   fabric network.  For instance, if a new MSP type is added, newer binaries
+#   might recognize and validate the signatures from this type, while older
+#   binaries without this support would be unable to validate those
+#   transactions.  This could lead to different versions of the fabric binaries
+#   having different world states.  Instead, defining a capability for a channel
+#   informs those binaries without this capability that they must cease
+#   processing transactions until they have been upgraded.  For v1.0.x if any
+#   capabilities are defined (including a map with all capabilities turned off)
+#   then the v1.0.x peer will deliberately crash.
+#
+################################################################################
+Capabilities:
+  # Channel capabilities apply to both the orderers and the peers and must be
+  # supported by both.
+  # Set the value of the capability to true to require it.
+  Channel: &ChannelCapabilities
+    # V2_0 capability ensures that orderers and peers behave according
+    # to v2.0 channel capabilities. Orderers and peers from
+    # prior releases would behave in an incompatible way, and are therefore
+    # not able to participate in channels at v2.0 capability.
+    # Prior to enabling V2.0 channel capabilities, ensure that all
+    # orderers and peers on a channel are at v2.0.0 or later.
+    V2_0: true
+  # Orderer capabilities apply only to the orderers, and may be safely
+  # used with prior release peers.
+  # Set the value of the capability to true to require it.
+  Orderer: &OrdererCapabilities
+    # V2_0 orderer capability ensures that orderers behave according
+    # to v2.0 orderer capabilities. Orderers from
+    # prior releases would behave in an incompatible way, and are therefore
+    # not able to participate in channels at v2.0 orderer capability.
+    # Prior to enabling V2.0 orderer capabilities, ensure that all
+    # orderers on channel are at v2.0.0 or later.
+    V2_0: true
+  # Application capabilities apply only to the peer network, and may be safely
+  # used with prior release orderers.
+  # Set the value of the capability to true to require it.
+  Application: &ApplicationCapabilities
+    # V2.5 for Application enables the new non-backwards compatible
+    # features of fabric v2.5, namely the ability to purge private data.
+    # Prior to enabling V2.5 application capabilities, ensure that all
+    # peers on a channel are at v2.5.0 or later.
+    V2_5: true
+################################################################################
+#
+#   SECTION: Application
+#
+#   - This section defines the values to encode into a config transaction or
+#   genesis block for application related parameters
+#
+################################################################################
+Application: &ApplicationDefaults
+  # Organizations is the list of orgs which are defined as participants on
+  # the application side of the network
+  Organizations:
+  # Policies defines the set of policies at this level of the config tree
+  # For Application policies, their canonical path is
+  #   /Channel/Application/<PolicyName>
+  Policies:
+    Readers:
+      Type: ImplicitMeta
+      Rule: "ANY Readers"
+    Writers:
+      Type: ImplicitMeta
+      Rule: "ANY Writers"
+    Admins:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Admins"
+    LifecycleEndorsement:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Endorsement"
+    Endorsement:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Endorsement"
+  Capabilities:
+    <<: *ApplicationCapabilities
+################################################################################
+#
+#   SECTION: Orderer
+#
+#   - This section defines the values to encode into a config transaction or
+#   genesis block for orderer related parameters
+#
+################################################################################
+Orderer: &OrdererDefaults
+  # Addresses used to be the list of orderer addresses that clients and peers
+  # could connect to.  However, this does not allow clients to associate orderer
+  # addresses and orderer organizations which can be useful for things such
+  # as TLS validation.  The preferred way to specify orderer addresses is now
+  # to include the OrdererEndpoints item in your org definition
+  Addresses:
+    - orderer1.component_supplier.carlife.com:7050
+    - orderer2.manufacturer.carlife.com:7054
+    - orderer3.insurer.carlife.com:7059
+  # Batch Timeout: The amount of time to wait before creating a batch
+  BatchTimeout: 2s
+  # Batch Size: Controls the number of messages batched into a block
+  BatchSize:
+    # Max Message Count: The maximum number of messages to permit in a batch
+    MaxMessageCount: 10
+    # Absolute Max Bytes: The absolute maximum number of bytes allowed for
+    # the serialized messages in a batch.
+    AbsoluteMaxBytes: 99 MB
+    # Preferred Max Bytes: The preferred maximum number of bytes allowed for
+    # the serialized messages in a batch. A message larger than the preferred
+    # max bytes will result in a batch larger than preferred max bytes.
+    PreferredMaxBytes: 512 KB
+  # Organizations is the list of orgs which are defined as participants on
+  # the orderer side of the network
+  Organizations:
+  # Policies defines the set of policies at this level of the config tree
+  # For Orderer policies, their canonical path is
+  #   /Channel/Orderer/<PolicyName>
+  Policies:
+    Readers:
+      Type: ImplicitMeta
+      Rule: "ANY Readers"
+    Writers:
+      Type: ImplicitMeta
+      Rule: "ANY Writers"
+    Admins:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Admins"
+    # BlockValidation specifies what signatures must be included in the block
+    # from the orderer for the peer to validate it.
+    BlockValidation:
+      Type: ImplicitMeta
+      Rule: "ANY Writers"
+################################################################################
+#
+#   CHANNEL
+#
+#   This section defines the values to encode into a config transaction or
+#   genesis block for channel related parameters.
+#
+################################################################################
+Channel: &ChannelDefaults
+  # Policies defines the set of policies at this level of the config tree
+  # For Channel policies, their canonical path is
+  #   /Channel/<PolicyName>
+  Policies:
+    # Who may invoke the 'Deliver' API
+    Readers:
+      Type: ImplicitMeta
+      Rule: "ANY Readers"
+    # Who may invoke the 'Broadcast' API
+    Writers:
+      Type: ImplicitMeta
+      Rule: "ANY Writers"
+    # By default, who may modify elements at this config level
+    Admins:
+      Type: ImplicitMeta
+      Rule: "MAJORITY Admins"
+  # Capabilities describes the channel level capabilities, see the
+  # dedicated Capabilities section elsewhere in this file for a full
+  # description
+  Capabilities:
+    <<: *ChannelCapabilities
+################################################################################
+#
+#   Profile
+#
+#   - Different configuration profiles may be encoded here to be specified
+#   as parameters to the configtxgen tool
+#
+################################################################################
+Profiles:
+  ChannelUsingRaft:
+    <<: *ChannelDefaults
+    Orderer:
+      <<: *OrdererDefaults
+      OrdererType: etcdraft
+      EtcdRaft:
+        Consenters:
+          - Host: orderer1.component_supplier.carlife.com
+            Port: 7050
+            ClientTLSCert: ../organizations/component_supplier.carlife.com/orderers/orderer1.component_supplier.carlife.com/tls/server.crt
+            ServerTLSCert: ../organizations/component_supplier.carlife.com/orderers/orderer1.component_supplier.carlife.com/tls/server.crt
+          - Host: orderer2.manufacturer.carlife.com
+            Port: 7054
+            ClientTLSCert: ../organizations/manufacturer.carlife.com/orderers/orderer2.manufacturer.carlife.com/tls/server.crt
+            ServerTLSCert: ../organizations/manufacturer.carlife.com/orderers/orderer2.manufacturer.carlife.com/tls/server.crt
+          - Host: orderer3.insurer.carlife.com
+            Port: 7059
+            ClientTLSCert: ../organizations/insurer.carlife.com/orderers/orderer3.insurer.carlife.com/tls/server.crt
+            ServerTLSCert: ../organizations/insurer.carlife.com/orderers/orderer3.insurer.carlife.com/tls/server.crt            
+      Organizations:
+        - *OrgComponentSupplier
+        - *OrgManufacturer
+        - *OrgInsurer
+      Capabilities: *OrdererCapabilities
+    Application:
+      <<: *ApplicationDefaults
+      Organizations:
+        - *OrgComponentSupplier
+        - *OrgManufacturer
+        - *OrgStore
+        - *OrgInsurer
+        - *OrgMaintenancer
+        - *OrgConsumer
+      Capabilities: *ApplicationCapabilities

@@ -310,7 +310,7 @@ services:
     networks:
       - carlife
 
-#=========================store===================================================================================================
+  #=========================store=================================================================================================
   sailer1.store.carlife.com:
     container_name: sailer1.store.carlife.com
     image: hyperledger/fabric-peer:latest
@@ -390,7 +390,7 @@ services:
       - carlife
 
 
-#=========================insurer=================================================================================================
+  #=========================insurer===============================================================================================
   orderer3.insurer.carlife.com:
     container_name: orderer3.insurer.carlife.com
     image: hyperledger/fabric-orderer:latest
@@ -511,7 +511,7 @@ services:
     networks:
       - carlife
 
-#=========================maintenancer============================================================================================
+  #=========================maintenancer==========================================================================================
   fixer1.maintenancer.carlife.com:
     container_name: fixer1.maintenancer.carlife.com
     image: hyperledger/fabric-peer:latest
@@ -590,7 +590,7 @@ services:
     networks:
       - carlife
 
-#=========================consumer================================================================================================
+  #=========================consumer==============================================================================================
   user1.consumer.carlife.com:
     container_name: user1.consumer.carlife.com
     image: hyperledger/fabric-peer:latest
