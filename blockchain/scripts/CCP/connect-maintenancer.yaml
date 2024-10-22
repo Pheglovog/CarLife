@@ -1,0 +1,43 @@
+name: carlife-OrgMaintenancer
+version: 1.0.0
+client:
+  organization: OrgMaintenancer
+  connection:
+    timeout:
+      peer:
+        endorser: '300'
+organizations:
+  OrgMaintenancer:
+    mspid: MaintenancerMSP
+    peers:
+    - fixer1.maintenancer.carlife.com
+    - fixer2.maintenancer.carlife.com
+    certificateAuthorities:
+    - ca.maintenancer.carlife.com
+peers:
+  fixer1.maintenancer.carlife.com:
+    url: grpcs://localhost:7062
+    tlsCACerts:
+      pem: |
+          ${TLSCAPEM}
+    grpcOptions:
+      ssl-target-name-override: fixer1.maintenancer.carlife.com
+      hostnameOverride: fixer1.maintenancer.carlife.com
+  fixer2.maintenancer.carlife.com:
+    url: grpcs://localhost:7063
+    tlsCACerts:
+      pem: |
+          ${TLSCAPEM}
+    grpcOptions:
+      ssl-target-name-override: fixer2.maintenancer.carlife.com
+      hostnameOverride: fixer2.maintenancer.carlife.com
+certificateAuthorities:
+  ca.maintenancer.carlife.com:
+    url: https://localhost:17055
+    caName: ca_maintenancer
+    tlsCACerts:
+      pem: 
+        - |
+          ${ORGCAPEM}
+    httpOptions:
+      verify: false

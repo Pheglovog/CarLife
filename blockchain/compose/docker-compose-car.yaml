@@ -25,7 +25,7 @@ volumes:
   user2.consumer.carlife.com:
 
 networks:
-  test:
+  carlife:
     name: carlife
 
 services:

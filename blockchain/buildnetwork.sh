@@ -5,6 +5,8 @@ export PATH=${ROOTDIR}/bin:${PWD}/bin:$PATH
 export FABRIC_CFG_PATH=${PWD}/configtx
 export VERBOSE=false
 
+CONTAINER_CLI=docker
+CONTAINER_CLI_COMPOSE=docker-compose
 COMPOSE_FILE_CAR=docker-compose-car.yaml
 COMPOSE_FILE_CA=docker-compose-ca.yaml
 # Get docker sock path from environment variable
@@ -16,7 +18,7 @@ DOCKER_SOCK="${SOCK##unix://}"
 function prereqsInfo() {
     # check docker image
     LOCAL_VERSION=$(peer version | sed -ne 's/^ Version: //p')
-    DOCKER_IMAGE_VERSION=$(docker-compose run --rm hyperledger/fabric-peer:latest peer version |
+    DOCKER_IMAGE_VERSION=$(docker run --rm hyperledger/fabric-peer:latest peer version |
                                  sed -ne 's/^ Version: //p')
     infoln "LOCAL_VERSION=$LOCAL_VERSION"
     infoln "DOCKER_IMAGE_VERSION=$DOCKER_IMAGE_VERSION"
@@ -34,15 +36,38 @@ function prereqsInfo() {
     fi
 }
 
+function createOrgs() {
+    infoln "Generating certificates using Fabric CA"
+    ${CONTAINER_CLI_COMPOSE} -f compose/$COMPOSE_FILE_CA up -d 2>&1
+    . scripts/registerEnroll.sh
+    while :
+    do
+      if [ ! -f "organizations/fabric-ca/component_supplier/tls-cert.pem" ]; then
+        sleep 1
+      else
+        break
+      fi
+    done
+    infoln "Creating component_supplier Identities"
+    createOrgComponentSupplier
+    infoln "Creating manufacturer Identities"
+    createOrgManufacturer
+    infoln "Creating insurer Identities"
+    createOrgInsurer
+    infoln "Creating store Identities"
+    createOrgStore
+    infoln "Creating maintenancer Identities"
+    createOrgMaintenancer
+    infoln "Creating consumer Identities"
+    createOrgConsumer
 
-
-
-
-
-
-
-
-
-
+    infoln "Generating CCP files for every organization"
+    ./scripts/ccp-generate.sh
+}
 
 prereqsInfo
+createOrgs
+COMPOSE_FILES="-f compose/${COMPOSE_FILE_CAR}"
+DOCKER_SOCK="${DOCKER_SOCK}" ${CONTAINER_CLI_COMPOSE} ${COMPOSE_FILES} up -d 2>&1
+$CONTAINER_CLI ps -a
+

@@ -1,0 +1,43 @@
+name: carlife-OrgStore
+version: 1.0.0
+client:
+  organization: OrgStore
+  connection:
+    timeout:
+      peer:
+        endorser: '300'
+organizations:
+  OrgStore:
+    mspid: StoreMSP
+    peers:
+    - sailer1.store.carlife.com
+    - sailer2.store.carlife.com
+    certificateAuthorities:
+    - ca.store.carlife.com
+peers:
+  sailer1.store.carlife.com:
+    url: grpcs://localhost:7057
+    tlsCACerts:
+      pem: |
+          ${TLSCAPEM}
+    grpcOptions:
+      ssl-target-name-override: sailer1.store.carlife.com
+      hostnameOverride: sailer1.store.carlife.com
+  sailer2.store.carlife.com:
+    url: grpcs://localhost:7058
+    tlsCACerts:
+      pem: |
+          ${TLSCAPEM}
+    grpcOptions:
+      ssl-target-name-override: sailer2.store.carlife.com
+      hostnameOverride: sailer2.store.carlife.com
+certificateAuthorities:
+  ca.store.carlife.com:
+    url: https://localhost:17053
+    caName: ca_store
+    tlsCACerts:
+      pem: 
+        - |
+          ${ORGCAPEM}
+    httpOptions:
+      verify: false

@@ -1,0 +1,62 @@
+name: carlife-OrgComponentSupplier
+version: 1.0.0
+client:
+  organization: OrgComponentSupplier
+  connection:
+    timeout:
+      peer:
+        endorser: '300'
+organizations:
+  OrgComponentSupplier:
+    mspid: ComponentSupplierMSP
+    peers:
+    - cartire.component_supplier.carlife.com
+    - carbody.component_supplier.carlife.com
+    - carinterior.component_supplier.carlife.com
+    certificateAuthorities:
+    - ca.component_supplier.carlife.com
+orderers:
+  orderer1.component_supplier.carlife.com:
+    url: grpcs://localhost:7050
+    tlsCACerts:
+      pem: |
+          ${TLSCAPEM}
+    grpcOptions:
+      ssl-target-name-override: orderer1.component_supplier.carlife.com
+      hostnameOverride: orderer1.component_supplier.carlife.com
+
+peers:
+  cartire.component_supplier.carlife.com:
+    url: grpcs://localhost:7051
+    tlsCACerts:
+      pem: |
+          ${TLSCAPEM}
+    grpcOptions:
+      ssl-target-name-override: cartire.component_supplier.carlife.com
+      hostnameOverride: cartire.component_supplier.carlife.com
+  carbody.component_supplier.carlife.com:
+    url: grpcs://localhost:7052
+    tlsCACerts:
+      pem: |
+          ${TLSCAPEM}
+    grpcOptions:
+      ssl-target-name-override: carbody.component_supplier.carlife.com
+      hostnameOverride: carbody.component_supplier.carlife.com
+  carinterior.component_supplier.carlife.com:
+    url: grpcs://localhost:7053
+    tlsCACerts:
+      pem: |
+          ${TLSCAPEM}
+    grpcOptions:
+      ssl-target-name-override: carinterior.component_supplier.carlife.com
+      hostnameOverride: carinterior.component_supplier.carlife.com
+certificateAuthorities:
+  ca.component_supplier.carlife.com:
+    url: https://localhost:17051
+    caName: ca_component_supplier
+    tlsCACerts:
+      pem: 
+        - |
+          ${ORGCAPEM}
+    httpOptions:
+      verify: false

@@ -1,0 +1,53 @@
+name: carlife-OrgInsurer
+version: 1.0.0
+client:
+  organization: OrgInsurer
+  connection:
+    timeout:
+      peer:
+        endorser: '300'
+organizations:
+  OrgInsurer:
+    mspid: InsurerMSP
+    peers:
+    - pcompany.insurer.carlife.com
+    - rcompany.insurer.carlife.com
+    certificateAuthorities:
+    - ca.insurer.carlife.com
+orderers:
+  orderer3.insurer.carlife.com:
+    url: grpcs://localhost:7059
+    tlsCACerts:
+      pem: |
+          ${TLSCAPEM}
+    grpcOptions:
+      ssl-target-name-override: orderer3.insurer.carlife.com
+      hostnameOverride: orderer3.insurer.carlife.com
+
+peers:
+  pcompany.insurer.carlife.com:
+    url: grpcs://localhost:7060
+    tlsCACerts:
+      pem: |
+          ${TLSCAPEM}
+    grpcOptions:
+      ssl-target-name-override: pcompany.insurer.carlife.com
+      hostnameOverride: pcompany.insurer.carlife.com
+  rcompany.insurer.carlife.com:
+    url: grpcs://localhost:7061
+    tlsCACerts:
+      pem: |
+          ${TLSCAPEM}
+    grpcOptions:
+      ssl-target-name-override: rcompany.insurer.carlife.com
+      hostnameOverride: rcompany.insurer.carlife.com
+certificateAuthorities:
+  ca.insurer.carlife.com:
+    url: https://localhost:17054
+    caName: ca_insurer
+    tlsCACerts:
+      pem: 
+        - |
+          ${ORGCAPEM}
+    httpOptions:
+      verify: false

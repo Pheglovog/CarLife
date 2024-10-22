@@ -1,0 +1,53 @@
+name: carlife-OrgManufacturer
+version: 1.0.0
+client:
+  organization: OrgManufacturer
+  connection:
+    timeout:
+      peer:
+        endorser: '300'
+organizations:
+  OrgManufacturer:
+    mspid: ManufacturerMSP
+    peers:
+    - factory1.manufacturer.carlife.com
+    - factory2.manufacturer.carlife.com
+    certificateAuthorities:
+    - ca.manufacturer.carlife.com
+orderers:
+  orderer2.manufacturer.carlife.com:
+    url: grpcs://localhost:7054
+    tlsCACerts:
+      pem: |
+          ${TLSCAPEM}
+    grpcOptions:
+      ssl-target-name-override: orderer2.manufacturer.carlife.com
+      hostnameOverride: orderer2.manufacturer.carlife.com
+
+peers:
+  factory1.manufacturer.carlife.com:
+    url: grpcs://localhost:7055
+    tlsCACerts:
+      pem: |
+          ${TLSCAPEM}
+    grpcOptions:
+      ssl-target-name-override: factory1.manufacturer.carlife.com
+      hostnameOverride: factory1.manufacturer.carlife.com
+  factory2.manufacturer.carlife.com:
+    url: grpcs://localhost:7056
+    tlsCACerts:
+      pem: |
+          ${TLSCAPEM}
+    grpcOptions:
+      ssl-target-name-override: factory2.manufacturer.carlife.com
+      hostnameOverride: factory2.manufacturer.carlife.com
+certificateAuthorities:
+  ca.manufacturer.carlife.com:
+    url: https://localhost:17052
+    caName: ca_manufacturer
+    tlsCACerts:
+      pem: 
+        - |
+          ${ORGCAPEM}
+    httpOptions:
+      verify: false

@@ -1,0 +1,34 @@
+name: carlife-OrgConsumer
+version: 1.0.0
+client:
+  organization: OrgConsumer
+  connection:
+    timeout:
+      peer:
+        endorser: '300'
+organizations:
+  OrgConsumer:
+    mspid: ConsumerMSP
+    peers:
+    - user1.consumer.carlife.com
+    certificateAuthorities:
+    - ca.consumer.carlife.com
+peers:
+  user1.consumer.carlife.com:
+    url: grpcs://localhost:7064
+    tlsCACerts:
+      pem: |
+          ${TLSCAPEM}
+    grpcOptions:
+      ssl-target-name-override: user1.consumer.carlife.com
+      hostnameOverride: user1.consumer.carlife.com
+certificateAuthorities:
+  ca.consumer.carlife.com:
+    url: https://localhost:17056
+    caName: ca_consumer
+    tlsCACerts:
+      pem: 
+        - |
+          ${ORGCAPEM}
+    httpOptions:
+      verify: false
