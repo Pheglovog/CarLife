@@ -30,6 +30,8 @@ services:
     labels:
       service: hyperledger-fabric
     environment:
+      - FABRIC_CA_SERVER_CSR_CN=ca.component_supplier.carlife.com
+      - FABRIC_CA_SERVER_CSR_HOSTS=localhost,component_supplier.carlife.com
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
       - FABRIC_CA_SERVER_CA_NAME=ca-component_supplier
       - FABRIC_CA_SERVER_TLS_ENABLED=true
@@ -50,6 +52,8 @@ services:
     labels:
       service: hyperledger-fabric
     environment:
+      - FABRIC_CA_SERVER_CSR_CN=ca.manufacturer.carlife.com
+      - FABRIC_CA_SERVER_CSR_HOSTS=localhost,manufacturer.carlife.com
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
       - FABRIC_CA_SERVER_CA_NAME=ca-manufacturer
       - FABRIC_CA_SERVER_TLS_ENABLED=true
@@ -70,6 +74,8 @@ services:
     labels:
       service: hyperledger-fabric
     environment:
+      - FABRIC_CA_SERVER_CSR_CN=ca.store.carlife.com
+      - FABRIC_CA_SERVER_CSR_HOSTS=localhost,store.carlife.com    
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
       - FABRIC_CA_SERVER_CA_NAME=ca-store
       - FABRIC_CA_SERVER_TLS_ENABLED=true
@@ -90,6 +96,8 @@ services:
     labels:
       service: hyperledger-fabric
     environment:
+      - FABRIC_CA_SERVER_CSR_CN=ca.insurer.carlife.com
+      - FABRIC_CA_SERVER_CSR_HOSTS=localhost,insurer.carlife.com       
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
       - FABRIC_CA_SERVER_CA_NAME=ca-insurer
       - FABRIC_CA_SERVER_TLS_ENABLED=true
@@ -110,6 +118,8 @@ services:
     labels:
       service: hyperledger-fabric
     environment:
+      - FABRIC_CA_SERVER_CSR_CN=ca.maintenancer.carlife.com
+      - FABRIC_CA_SERVER_CSR_HOSTS=localhost,maintenancer.carlife.com     
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
       - FABRIC_CA_SERVER_CA_NAME=ca-maintenancer
       - FABRIC_CA_SERVER_TLS_ENABLED=true
@@ -130,6 +140,8 @@ services:
     labels:
       service: hyperledger-fabric
     environment:
+      - FABRIC_CA_SERVER_CSR_CN=ca.consumer.carlife.com
+      - FABRIC_CA_SERVER_CSR_HOSTS=localhost,consumer.carlife.com        
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
       - FABRIC_CA_SERVER_CA_NAME=ca-consumer
       - FABRIC_CA_SERVER_TLS_ENABLED=true
