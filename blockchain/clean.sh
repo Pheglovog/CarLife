@@ -12,4 +12,5 @@ if [ ! -d "$TARGET_DIR" ]; then
   exit 1
 fi
 rm -rf $TARGET_DIR
+rm -rf channel-artifacts
 echo "Deletion operation completed."

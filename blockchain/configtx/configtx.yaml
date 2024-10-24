@@ -8,7 +8,7 @@
 ################################################################################
 Organizations:
   - &OrgComponentSupplier
-    Name: OrgComponentSupplier
+    Name: ComponentSupplierMSP
     ID: ComponentSupplierMSP
     MSPDir: ../organizations/component_supplier.carlife.com/msp
     Policies:
@@ -17,7 +17,7 @@ Organizations:
         Rule: "OR('ComponentSupplierMSP.admin', 'ComponentSupplierMSP.peer', 'ComponentSupplierMSP.client')"
       Writers:
         Type: Signature
-        Rule: "OR('ComponentSupplierMSP.admin', 'ComponentSupplierMSP.client')"
+        Rule: "OR('ComponentSupplierMSP.member')"
       Admins:
         Type: Signature
         Rule: "OR('ComponentSupplierMSP.admin')"
@@ -27,7 +27,7 @@ Organizations:
     OrdererEndpoints:
       - orderer1.component_supplier.carlife.com:7050
   - &OrgManufacturer
-    Name: OrgManufacturer
+    Name: ManufacturerMSP
     ID: ManufacturerMSP
     MSPDir: ../organizations/manufacturer.carlife.com/msp
     Policies:
@@ -46,7 +46,7 @@ Organizations:
     OrdererEndpoints:
       - orderer2.manufacturer.carlife.com:7054
   - &OrgStore
-    Name: OrgStore
+    Name: StoreMSP
     ID: StoreMSP
     MSPDir: ../organizations/store.carlife.com/msp
     Policies:
@@ -63,7 +63,7 @@ Organizations:
         Type: Signature
         Rule: "OR('StoreMSP.peer')"
   - &OrgInsurer
-    Name: OrgInsurer
+    Name: InsurerMSP
     ID: InsurerMSP
     MSPDir: ../organizations/insurer.carlife.com/msp
     Policies:
@@ -82,7 +82,7 @@ Organizations:
     OrdererEndpoints:
       - orderer3.insurer.carlife.com:7059
   - &OrgMaintenancer
-    Name: OrgMaintenancer
+    Name: MaintenancerMSP
     ID: MaintenancerMSP
     MSPDir: ../organizations/maintenancer.carlife.com/msp
     Policies:
@@ -99,7 +99,7 @@ Organizations:
         Type: Signature
         Rule: "OR('MaintenancerMSP.peer')"
   - &OrgConsumer
-    Name: OrgConsumer
+    Name: ConsumerMSP
     ID: ConsumerMSP
     MSPDir: ../organizations/consumer.carlife.com/msp
     Policies:
