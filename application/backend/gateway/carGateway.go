@@ -158,7 +158,7 @@ func newGateway(orgConfig OrgConfig) *client.Gateway {
 	return gw
 }
 
-func RegisterUser(userID string, userType string, password string) error {
+func RegisterUser(userID string, userType string, password string) (string, error) {
 	var mspID string
 	switch userType {
 	case chaincode.ComponentSupplier:
@@ -174,13 +174,21 @@ func RegisterUser(userID string, userType string, password string) error {
 	case chaincode.Consumer:
 		mspID = "StoreMSP"
 	default:
-		return fmt.Errorf("user type %s is not supported", userType)
+		return "", fmt.Errorf("user type %s is not supported", userType)
 	}
 	gw := GatewayMap[mspID]
 	net := gw.GetNetwork(channel)
 	contract := net.GetContract(SmartContract)
-	_, err := contract.SubmitTransaction("RegisterUser", userID, userType, password)
-	return err
+	_, commit, err := contract.SubmitAsync("RegisterUser", client.WithArguments(userID, userType, password))
+	if err != nil {
+		return "", fmt.Errorf("failed to submit register transaction asynchronously: %w", err)
+	}
+	if commitStatus, err := commit.Status(); err != nil {
+		return "", fmt.Errorf("failed to get commit status: %w", err)
+	} else if !commitStatus.Successful {
+		return "", fmt.Errorf("transaction %s failed to commit with status: %d", commitStatus.TransactionID, int32(commitStatus.Code))
+	}
+	return commit.TransactionID(), err
 }
 
 func GetUser(userID string) (string, error) {

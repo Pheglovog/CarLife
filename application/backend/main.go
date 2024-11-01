@@ -1,19 +1,23 @@
 package main
 
 import (
+	"carlife-backend/config"
 	"carlife-backend/gateway"
 	"carlife-backend/router"
-	"fmt"
-
-	"github.com/spf13/viper"
 )
 
 func main() {
+	// Init config
+	config.InitConfig()
 	gateway.InitGateways("gateway/config.json")
-	// 注册路由
+
+	// Init router
 	r := router.SetupRouter()
 
-	// 启动服务
-	r.Run(fmt.Sprintf(":%d", viper.GetInt("app.port")))
-
+	// Run server
+	listenAddr := config.AppConfig.App.Host + ":" + config.AppConfig.App.Port
+	if config.AppConfig.App.Host == "" || config.AppConfig.App.Port == "" {
+		listenAddr = "localhost:8080"
+	}
+	r.Run(listenAddr)
 }

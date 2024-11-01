@@ -1,0 +1,4 @@
+app:
+  name: CarLife
+  host: localhost
+  port: 3456
