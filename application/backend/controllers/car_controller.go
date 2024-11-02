@@ -2,7 +2,7 @@ package controller
 
 import (
 	"carlife-backend/gateway"
-	"carlife-chaincode-go/chaincode"
+	"carlife-backend/model"
 	"encoding/json"
 	"net/http"
 
@@ -22,7 +22,7 @@ func GetCar(ctx *gin.Context) {
 }
 
 func GetCarList(ctx *gin.Context) {
-	var user chaincode.User
+	var user = model.User{}
 	userID, _ := ctx.Get("userID")
 	res, err := gateway.GetUser(userID.(string))
 	if err != nil {

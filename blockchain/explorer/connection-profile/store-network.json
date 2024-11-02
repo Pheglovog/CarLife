@@ -1,0 +1,77 @@
+{
+	"name": "store-network",
+	"version": "1.0.0",
+	"client": {
+		"tlsEnable": true,
+		"adminCredential": {
+			"id": "exploreradmin",
+			"password": "exploreradminpw"
+		},
+		"caCredential": {
+			"id": "admin",
+			"password": "adminpw"
+		},
+		"enableAuthentication": true,
+		"organization": "StoreMSP",
+		"connection": {
+			"timeout": {
+				"peer": {
+					"endorser": "300"
+				},
+				"orderer": "300"
+			}
+		}
+	},
+	"channels": {
+		"carchannel": {
+			"peers": {
+				"sailer1.store.carlife.com": {},
+				"sailer2.store.carlife.com": {}
+			},
+			"connection": {
+				"timeout": {
+					"peer": {
+						"endorser": "6000",
+						"eventHub": "6000",
+						"eventReg": "6000"
+					}
+				}
+			}		
+		}
+	},
+	"organizations": {
+		"StoreMSP": {
+			"mspid": "StoreMSP",
+            "peers": ["sailer1.store.carlife.com", "sailer2.store.carlife.com"],
+			"certificateAuthorities": ["ca0"]
+		}
+	},
+	"peers": {
+		"sailer1.store.carlife.com": {
+			"tlsCACerts": {
+			  "path":
+				"/tmp/crypto/store.carlife.com/peers/sailer1.store.carlife.com/tls/ca.crt"
+			},
+			"url": "grpcs://sailer1.store.carlife.com:7057"
+		},
+		"sailer2.store.carlife.com": {
+			"tlsCACerts": {
+			  "path":
+				"/tmp/crypto/store.carlife.com/peers/sailer2.store.carlife.com/tls/ca.crt"
+			},
+			"url": "grpcs://sailer2.store.carlife.com:7058"
+		}
+	},
+	"certificateAuthorities": {
+		"ca0": {
+			"url": "https://ca_store:17053",
+			"httpOptions": {
+				"verify": false
+			},
+			"tlsCACerts": {
+				"path": "/tmp/crypto/store.carlife.com/ca/ca.store.carlife.com-cert.pem"
+			},
+			"caName": "ca_store"
+		}
+	}
+}

@@ -2,46 +2,46 @@
     "organizations": [
         {
             "mspID": "ComponentSupplierMSP",
-            "cryptoPath": "../../../blockchain/organizations/component_supplier.carlife.com",
-            "certPath": "../../../blockchain/organizations/component_supplier.carlife.com/users/User1@org1.example.com/msp/signcerts",
-            "keyPath": "../../../blockchain/organizations/component_supplier.carlife.com/users/User1@org1.example.com/msp/keystore",
-            "tlsCertPath": "../../../blockchain/organizations/component_supplier.carlife.com/peers/cartire.component_supplier.carlife.com/tls/ca.crt",
+            "cryptoPath": "../../blockchain/organizations/component_supplier.carlife.com",
+            "certPath": "../../blockchain/organizations/component_supplier.carlife.com/users/User1@component_supplier.carlife.com/msp/signcerts",
+            "keyPath": "../../blockchain/organizations/component_supplier.carlife.com/users/User1@component_supplier.carlife.com/msp/keystore",
+            "tlsCertPath": "../../blockchain/organizations/component_supplier.carlife.com/peers/cartire.component_supplier.carlife.com/tls/ca.crt",
             "peerEndpoint": "dns:///localhost:7051",
             "gatewayPeer": "cartire.component_supplier.carlife.com"
         },
         {
             "mspID": "ManufacturerMSP",
-            "cryptoPath": "../../../blockchain/organizations/manufacturer.carlife.com",
-            "certPath": "../../../blockchain/organizations/manufacturer.carlife.com/users/User1@org1.example.com/msp/signcerts",
-            "keyPath": "../../../blockchain/organizations/manufacturer.carlife.com/users/User1@org1.example.com/msp/keystore",
-            "tlsCertPath": "../../../blockchain/organizations/manufacturer.carlife.com/peers/factory1.manufacturer.carlife.com/tls/ca.crt",
+            "cryptoPath": "../../blockchain/organizations/manufacturer.carlife.com",
+            "certPath": "../../blockchain/organizations/manufacturer.carlife.com/users/User1@manufacturer.carlife.com/msp/signcerts",
+            "keyPath": "../../blockchain/organizations/manufacturer.carlife.com/users/User1@manufacturer.carlife.com/msp/keystore",
+            "tlsCertPath": "../../blockchain/organizations/manufacturer.carlife.com/peers/factory1.manufacturer.carlife.com/tls/ca.crt",
             "peerEndpoint": "dns:///localhost:7055",
             "gatewayPeer": "factory1.manufacturer.carlife.com"
         },
         {
             "mspID": "StoreMSP",
-            "cryptoPath": "../../../blockchain/organizations/store.carlife.com",
-            "certPath": "../../../blockchain/organizations/store.carlife.com/users/User1@org1.example.com/msp/signcerts",
-            "keyPath": "../../../blockchain/organizations/store.carlife.com/users/User1@org1.example.com/msp/keystore",
-            "tlsCertPath": "../../../blockchain/organizations/store.carlife.com/peers/sailer1.store.carlife.com/tls/ca.crt",
+            "cryptoPath": "../../blockchain/organizations/store.carlife.com",
+            "certPath": "../../blockchain/organizations/store.carlife.com/users/User1@store.carlife.com/msp/signcerts",
+            "keyPath": "../../blockchain/organizations/store.carlife.com/users/User1@store.carlife.com/msp/keystore",
+            "tlsCertPath": "../../blockchain/organizations/store.carlife.com/peers/sailer1.store.carlife.com/tls/ca.crt",
             "peerEndpoint": "dns:///localhost:7057",
             "gatewayPeer": "sailer1.store.carlife.com"
         },
         {
             "mspID": "InsurerMSP",
-            "cryptoPath": "../../../blockchain/organizations/insurer.carlife.com",
-            "certPath": "../../../blockchain/organizations/insurer.carlife.com/users/User1@org1.example.com/msp/signcerts",
-            "keyPath": "../../../blockchain/organizations/insurer.carlife.com/users/User1@org1.example.com/msp/keystore",
-            "tlsCertPath": "../../../blockchain/organizations/insurer.carlife.com/peers/pcompany.insurer.carlife.com/tls/ca.crt",
+            "cryptoPath": "../../blockchain/organizations/insurer.carlife.com",
+            "certPath": "../../blockchain/organizations/insurer.carlife.com/users/User1@insurer.carlife.com/msp/signcerts",
+            "keyPath": "../../blockchain/organizations/insurer.carlife.com/users/User1@insurer.carlife.com/msp/keystore",
+            "tlsCertPath": "../../blockchain/organizations/insurer.carlife.com/peers/pcompany.insurer.carlife.com/tls/ca.crt",
             "peerEndpoint": "dns:///localhost:7060",
             "gatewayPeer": "pcompany.insurer.carlife.com"
         },
         {
             "mspID": "MaintenancerMSP",
-            "cryptoPath": "../../../blockchain/organizations/maintenancer.carlife.com",
-            "certPath": "../../../blockchain/organizations/maintenancer.carlife.com/users/User1@org1.example.com/msp/signcerts",
-            "keyPath": "../../../blockchain/organizations/maintenancer.carlife.com/users/User1@org1.example.com/msp/keystore",
-            "tlsCertPath": "../../../blockchain/organizations/maintenancer.carlife.com/peers/fixer1.maintenancer.carlife.com/tls/ca.crt",
+            "cryptoPath": "../../blockchain/organizations/maintenancer.carlife.com",
+            "certPath": "../../blockchain/organizations/maintenancer.carlife.com/users/User1@maintenancer.carlife.com/msp/signcerts",
+            "keyPath": "../../blockchain/organizations/maintenancer.carlife.com/users/User1@maintenancer.carlife.com/msp/keystore",
+            "tlsCertPath": "../../blockchain/organizations/maintenancer.carlife.com/peers/fixer1.maintenancer.carlife.com/tls/ca.crt",
             "peerEndpoint": "dns:///localhost:7062",
             "gatewayPeer": "fixer1.maintenancer.carlife.com"
         }

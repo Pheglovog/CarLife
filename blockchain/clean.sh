@@ -2,6 +2,7 @@
 
 docker-compose -f compose/docker-compose-car.yaml down -v
 docker-compose -f compose/docker-compose-ca.yaml down -v
+docker-compose -f explorer/docker-compose.yaml down -v
 
 # Specify the target directory
 TARGET_DIR="organizations"
@@ -13,4 +14,6 @@ if [ ! -d "$TARGET_DIR" ]; then
 fi
 rm -rf $TARGET_DIR
 rm -rf channel-artifacts
+rm *.tar.gz
+rm -rf explorer/organizations
 echo "Deletion operation completed."

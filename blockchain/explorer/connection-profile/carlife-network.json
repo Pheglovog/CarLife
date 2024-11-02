@@ -1,0 +1,229 @@
+{
+	"name": "carlife",
+	"version": "1.0.0",
+	"client": {
+		"tlsEnable": true,
+		"adminCredential": {
+			"id": "exploreradmin",
+			"password": "exploreradminpw"
+		},
+		"enableAuthentication": true,
+		"organization": "StoreMSP",
+		"connection": {
+			"timeout": {
+				"peer": {
+					"endorser": "300"
+				},
+				"orderer": "300"
+			}
+		}
+	},
+	"channels": {
+		"carchannel": {
+			"peers": {
+				"sailer1.store.carlife.com": {}
+			}
+		}
+	},
+	"organizations": {
+		"ComponentSupplierMSP": {
+			"mspid": "ComponentSupplierMSP",
+			"adminPrivateKey": {
+				"path": "/tmp/crypto/component_supplier.carlife.com/users/Admin1@component_supplier.carlife.com/msp/keystore"
+			},
+			"signedCert": {
+				"path": "/tmp/crypto/component_supplier.carlife.com/users/Admin1@component_supplier.carlife.com/msp/signcerts"
+			}
+		},
+		"ManufacturerMSP": {
+			"mspid": "ManufacturerMSP",
+			"adminPrivateKey": {
+				"path": "/tmp/crypto/manufacturer.carlife.com/users/Admin1@manufacturer.carlife.com/msp/keystore"
+			},
+			"signedCert": {
+				"path": "/tmp/crypto/manufacturer.carlife.com/users/Admin1@manufacturer.carlife.com/msp/signcerts"
+			}
+		},
+		"StoreMSP": {
+			"mspid": "StoreMSP",
+			"adminPrivateKey": {
+				"path": "/tmp/crypto/store.carlife.com/users/Admin1@store.carlife.com/msp/keystore/key.pem"
+			},
+			"signedCert": {
+				"path": "/tmp/crypto/store.carlife.com/users/Admin1@store.carlife.com/msp/signcerts/cert.pem"
+			}
+		},
+		"InsurerMSP": {
+			"mspid": "InsurerMSP",
+			"adminPrivateKey": {
+				"path": "/tmp/crypto/insurer.carlife.com/users/Admin1@insurer.carlife.com/msp/keystore"
+			},
+			"signedCert": {
+				"path": "/tmp/crypto/insurer.carlife.com/users/Admin1@insurer.carlife.com/msp/signcerts"
+			}
+		},
+		"MaintenancerMSP": {
+			"mspid": "MaintenancerMSP",
+			"adminPrivateKey": {
+				"path": "/tmp/crypto/maintenancer.carlife.com/users/Admin1@maintenancer.carlife.com/msp/keystore"
+			},
+			"signedCert": {
+				"path": "/tmp/crypto/maintenancer.carlife.com/users/Admin1@maintenancer.carlife.com/msp/signcerts"
+			}
+		},
+		"ConsumerMSP": {
+			"mspid": "ConsumerMSP",
+			"adminPrivateKey": {
+				"path": "/tmp/crypto/consumer.carlife.com/users/Admin1@consumer.carlife.com/msp/keystore"
+			},
+			"signedCert": {
+				"path": "/tmp/crypto/consumer.carlife.com/users/Admin1@consumer.carlife.com/msp/signcerts"
+			}
+		}
+	},
+	"peers": {
+        "cartire.component_supplier.carlife.com": {
+			"tlsCACerts": {
+			  "path":
+				"/tmp/crypto/component_supplier.carlife.com/peers/cartire.component_supplier.carlife.com/tls/ca.crt"
+			},
+			"url": "grpcs://localhost:7051",
+			"eventUrl": "grpcs://localhost:8051",
+			"grpcOptions": {
+			  "ssl-target-name-override": "cartire.component_supplier.carlife.com"
+			}
+		},
+		"carbody.component_supplier.carlife.com": {
+			"tlsCACerts": {
+			  "path":
+				"/tmp/crypto/component_supplier.carlife.com/peers/carbody.component_supplier.carlife.com/tls/ca.crt"
+			},
+			"url": "grpcs://localhost:7052",
+			"eventUrl": "grpcs://localhost:8052",
+			"grpcOptions": {
+			  "ssl-target-name-override": "carbody.component_supplier.carlife.com"
+			}
+		},
+		"carinterior.component_supplier.carlife.com": {
+			"tlsCACerts": {
+			  "path":
+				"/tmp/crypto/component_supplier.carlife.com/peers/carinterior.component_supplier.carlife.com/tls/ca.crt"
+			},
+			"url": "grpcs://localhost:7053",
+			"eventUrl": "grpcs://localhost:8053",
+			"grpcOptions": {
+			  "ssl-target-name-override": "carinterior.component_supplier.carlife.com"
+			}
+		},
+		"factory1.manufacturer.carlife.com": {
+			"tlsCACerts": {
+			  "path":
+				"/tmp/crypto/manufacturer.carlife.com/peers/factory1.manufacturer.carlife.com/tls/ca.crt"
+			},
+			"url": "grpcs://localhost:7055",
+			"eventUrl": "grpcs://localhost:8055",
+			"grpcOptions": {
+			  "ssl-target-name-override": "factory1.manufacturer.carlife.com"
+			}
+		},
+		"factory2.manufacturer.carlife.com": {
+			"tlsCACerts": {
+			  "path":
+				"/tmp/crypto/manufacturer.carlife.com/peers/factory2.manufacturer.carlife.com/tls/ca.crt"
+			},
+			"url": "grpcs://localhost:7056",
+			"eventUrl": "grpcs://localhost:8056",
+			"grpcOptions": {
+			  "ssl-target-name-override": "factory2.manufacturer.carlife.com"
+			}
+		},
+		"sailer1.store.carlife.com": {
+			"tlsCACerts": {
+			  "path":
+				"/tmp/crypto/store.carlife.com/peers/sailer1.store.carlife.com/tls/ca.crt"
+			},
+			"url": "grpcs://localhost:7057",
+			"eventUrl": "grpcs://localhost:8057",
+			"grpcOptions": {
+			  "ssl-target-name-override": "sailer1.store.carlife.com"
+			}
+		},
+		"sailer2.store.carlife.com": {
+			"tlsCACerts": {
+			  "path":
+				"/tmp/crypto/store.carlife.com/peers/sailer2.store.carlife.com/tls/ca.crt"
+			},
+			"url": "grpcs://localhost:7058",
+			"eventUrl": "grpcs://localhost:8058",
+			"grpcOptions": {
+			  "ssl-target-name-override": "sailer2.store.carlife.com"
+			}
+		},
+		"pcompany.insurer.carlife.com": {
+			"tlsCACerts": {
+			  "path":
+				"/tmp/crypto/insurer.carlife.com/peers/pcompany.insurer.carlife.com/tls/ca.crt"
+			},
+			"url": "grpcs://localhost:7060",
+			"eventUrl": "grpcs://localhost:8060",
+			"grpcOptions": {
+			  "ssl-target-name-override": "pcompany.insurer.carlife.com"
+			}
+		},
+		"rcompany.insurer.carlife.com": {
+			"tlsCACerts": {
+			  "path":
+				"/tmp/crypto/insurer.carlife.com/peers/rcompany.insurer.carlife.com/tls/ca.crt"
+			},
+			"url": "grpcs://localhost:7061",
+			"eventUrl": "grpcs://localhost:8061",
+			"grpcOptions": {
+			  "ssl-target-name-override": "rcompany.insurer.carlife.com"
+			}
+		},
+		"fixer1.maintenancer.carlife.com": {
+			"tlsCACerts": {
+			  "path":
+				"/tmp/crypto/maintenancer.carlife.com/peers/fixer1.maintenancer.carlife.com/tls/ca.crt"
+			},
+			"url": "grpcs://localhost:7062",
+			"eventUrl": "grpcs://localhost:8062",
+			"grpcOptions": {
+			  "ssl-target-name-override": "fixer1.maintenancer.carlife.com"
+			}
+		},
+		"fixer2.maintenancer.carlife.com": {
+			"tlsCACerts": {
+			  "path":
+				"/tmp/crypto/maintenancer.carlife.com/peers/fixer2.maintenancer.carlife.com/tls/ca.crt"
+			},
+			"url": "grpcs://localhost:7063",
+			"eventUrl": "grpcs://localhost:8063",
+			"grpcOptions": {
+			  "ssl-target-name-override": "fixer2.maintenancer.carlife.com"
+			}
+		},
+		"user1.consumer.carlife.com": {
+			"tlsCACerts": {
+			  "path":
+				"/tmp/crypto/consumer.carlife.com/peers/user1.consumer.carlife.com/tls/ca.crt"
+			},
+			"url": "grpcs://localhost:7064",
+			"eventUrl": "grpcs://localhost:8064",
+			"grpcOptions": {
+			  "ssl-target-name-override": "user1.consumer.carlife.com"
+			}
+		}	
+	},
+	"orderers": {
+        "orderer1.component_supplier.carlife.com": {
+          "url": "grpcs://localhost:7050"
+        },
+		"orderer2.manufacturer.carlife.com": {
+			"url": "grpcs://localhost:7054"
+		},
+		"orderer3.insurer.carlife.com": {
+			"url": "grpcs://localhost:7059"
+		}	
+    }
+}

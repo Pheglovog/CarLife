@@ -2,8 +2,8 @@ package controller
 
 import (
 	"carlife-backend/gateway"
+	"carlife-backend/model"
 	"carlife-backend/utils"
-	"carlife-chaincode-go/chaincode"
 	"encoding/json"
 	"net/http"
 
@@ -32,7 +32,7 @@ func Register(ctx *gin.Context) {
 
 func Login(ctx *gin.Context) {
 	//get user
-	user := chaincode.User{}
+	user := model.User{}
 	userID := ctx.PostForm("userID")
 	password := ctx.PostForm("password")
 	userJson, err := gateway.GetUser(userID)

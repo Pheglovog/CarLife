@@ -1,7 +1,7 @@
 package gateway
 
 import (
-	"carlife-chaincode-go/chaincode"
+	"carlife-backend/model"
 	"crypto/x509"
 	"encoding/json"
 	"fmt"
@@ -19,7 +19,7 @@ import (
 
 var GatewayMap = make(map[string]*client.Gateway)
 var channel = "carchannel"
-var SmartContract = "cartrace"
+var SmartContract = "carlife-chaincode-go"
 
 type OrgConfig struct {
 	MSPID        string `json:"mspID"`
@@ -161,17 +161,17 @@ func newGateway(orgConfig OrgConfig) *client.Gateway {
 func RegisterUser(userID string, userType string, password string) (string, error) {
 	var mspID string
 	switch userType {
-	case chaincode.ComponentSupplier:
+	case model.ComponentSupplier:
 		mspID = "ComponentSupplierMSP"
-	case chaincode.Manufacturer:
+	case model.Manufacturer:
 		mspID = "ManufacturerMSP"
-	case chaincode.Store:
+	case model.Store:
 		mspID = "StoreMSP"
-	case chaincode.Insurer:
+	case model.Insurer:
 		mspID = "InsurerMSP"
-	case chaincode.Maintenancer:
+	case model.Maintenancer:
 		mspID = "MaintenancerMSP"
-	case chaincode.Consumer:
+	case model.Consumer:
 		mspID = "StoreMSP"
 	default:
 		return "", fmt.Errorf("user type %s is not supported", userType)

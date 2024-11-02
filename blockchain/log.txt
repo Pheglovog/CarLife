@@ -1,2 +1,2 @@
-[34m2024-10-24 22:08:58.980 CST 0001 INFO[0m [channelCmd] [34;1mInitCmdFactory[0m -> Endorser and orderer connections initialized
-[34m2024-10-24 22:08:58.990 CST 0002 INFO[0m [channelCmd] [34;1mupdate[0m -> Successfully submitted channel update
+Committed chaincode definition for chaincode 'carlife-chaincode-go' on channel 'carchannel':
+Version: 1.0, Sequence: 1, Endorsement Plugin: escc, Validation Plugin: vscc, Approvals: [ComponentSupplierMSP: true, ConsumerMSP: true, InsurerMSP: true, MaintenancerMSP: true, ManufacturerMSP: true, StoreMSP: true]
