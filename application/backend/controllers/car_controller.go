@@ -10,7 +10,7 @@ import (
 )
 
 func GetCar(ctx *gin.Context) {
-	res, err := gateway.GetCar(ctx.PostForm("carID"))
+	res, err := gateway.GetCar(ctx.Query("carID"))
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -226,7 +226,7 @@ func SetCarMaint(ctx *gin.Context) {
 	var input struct {
 		CarID  string  `json:"carID"`
 		Part   string  `json:"part"`
-		Entent string  `json:"entent"`
+		Extent string  `json:"extent"`
 		Cost   float32 `json:"cost"`
 	}
 	if err := ctx.ShouldBind(&input); err != nil {
@@ -238,7 +238,7 @@ func SetCarMaint(ctx *gin.Context) {
 		userID.(string),
 		input.CarID,
 		input.Part,
-		input.Entent,
+		input.Extent,
 		input.Cost,
 	)
 	if err != nil {

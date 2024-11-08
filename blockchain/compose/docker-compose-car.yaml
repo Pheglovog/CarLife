@@ -32,7 +32,7 @@ services:
   #=========================component_supplier====================================================================================
   orderer1.component_supplier.carlife.com:
     container_name: orderer1.component_supplier.carlife.com
-    image: hyperledger/fabric-orderer:2.5.9
+    image: hyperledger/fabric-orderer:2.5.10
     labels:
       service: hyperledger-fabric
     environment:
@@ -75,7 +75,7 @@ services:
 
   cartire.component_supplier.carlife.com:
     container_name: cartire.component_supplier.carlife.com
-    image: hyperledger/fabric-peer:2.5.9
+    image: hyperledger/fabric-peer:2.5.10
     labels:
       service: hyperledger-fabric
     environment:
@@ -116,7 +116,7 @@ services:
 
   carbody.component_supplier.carlife.com:
     container_name: carbody.component_supplier.carlife.com
-    image: hyperledger/fabric-peer:2.5.9
+    image: hyperledger/fabric-peer:2.5.10
     labels:
       service: hyperledger-fabric
     environment:
@@ -157,7 +157,7 @@ services:
 
   carinterior.component_supplier.carlife.com:
     container_name: carinterior.component_supplier.carlife.com
-    image: hyperledger/fabric-peer:2.5.9
+    image: hyperledger/fabric-peer:2.5.10
     labels:
       service: hyperledger-fabric
     environment:
@@ -199,7 +199,7 @@ services:
   #=========================manufacturer==========================================================================================
   orderer2.manufacturer.carlife.com:
     container_name: orderer2.manufacturer.carlife.com
-    image: hyperledger/fabric-orderer:2.5.9
+    image: hyperledger/fabric-orderer:2.5.10
     labels:
       service: hyperledger-fabric
     environment:
@@ -241,7 +241,7 @@ services:
 
   factory1.manufacturer.carlife.com:
     container_name: factory1.manufacturer.carlife.com
-    image: hyperledger/fabric-peer:2.5.9
+    image: hyperledger/fabric-peer:2.5.10
     labels:
       service: hyperledger-fabric
     environment:
@@ -281,7 +281,7 @@ services:
       - carlife
   factory2.manufacturer.carlife.com:
     container_name: factory2.manufacturer.carlife.com
-    image: hyperledger/fabric-peer:2.5.9
+    image: hyperledger/fabric-peer:2.5.10
     labels:
       service: hyperledger-fabric
     environment:
@@ -323,7 +323,7 @@ services:
   #=========================store=================================================================================================
   sailer1.store.carlife.com:
     container_name: sailer1.store.carlife.com
-    image: hyperledger/fabric-peer:2.5.9
+    image: hyperledger/fabric-peer:2.5.10
     labels:
       service: hyperledger-fabric
     environment:
@@ -364,7 +364,7 @@ services:
 
   sailer2.store.carlife.com:
     container_name: sailer2.store.carlife.com
-    image: hyperledger/fabric-peer:2.5.9
+    image: hyperledger/fabric-peer:2.5.10
     labels:
       service: hyperledger-fabric
     environment:
@@ -407,7 +407,7 @@ services:
   #=========================insurer===============================================================================================
   orderer3.insurer.carlife.com:
     container_name: orderer3.insurer.carlife.com
-    image: hyperledger/fabric-orderer:2.5.9
+    image: hyperledger/fabric-orderer:2.5.10
     labels:
       service: hyperledger-fabric
     environment:
@@ -449,7 +449,7 @@ services:
 
   pcompany.insurer.carlife.com:
     container_name: pcompany.insurer.carlife.com
-    image: hyperledger/fabric-peer:2.5.9
+    image: hyperledger/fabric-peer:2.5.10
     labels:
       service: hyperledger-fabric
     environment:
@@ -490,7 +490,7 @@ services:
 
   rcompany.insurer.carlife.com:
     container_name: rcompany.insurer.carlife.com
-    image: hyperledger/fabric-peer:2.5.9
+    image: hyperledger/fabric-peer:2.5.10
     labels:
       service: hyperledger-fabric
     environment:
@@ -532,7 +532,7 @@ services:
   #=========================maintenancer==========================================================================================
   fixer1.maintenancer.carlife.com:
     container_name: fixer1.maintenancer.carlife.com
-    image: hyperledger/fabric-peer:2.5.9
+    image: hyperledger/fabric-peer:2.5.10
     labels:
       service: hyperledger-fabric
     environment:
@@ -573,7 +573,7 @@ services:
 
   fixer2.maintenancer.carlife.com:
     container_name: fixer2.maintenancer.carlife.com
-    image: hyperledger/fabric-peer:2.5.9
+    image: hyperledger/fabric-peer:2.5.10
     labels:
       service: hyperledger-fabric
     environment:
@@ -615,7 +615,7 @@ services:
   #=========================consumer==============================================================================================
   user1.consumer.carlife.com:
     container_name: user1.consumer.carlife.com
-    image: hyperledger/fabric-peer:2.5.9
+    image: hyperledger/fabric-peer:2.5.10
     labels:
       service: hyperledger-fabric
     environment:
