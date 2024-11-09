@@ -8,15 +8,21 @@
         class="el-menu-demo custom-menu"
         mode="horizontal"
       >
-        <el-menu-item to="/" index="Home">CarLife</el-menu-item>
+        <el-menu-item index="Home">
+          <RouterLink :to="{name: 'home'}" class="no-underline">CarLife</RouterLink>
+        </el-menu-item>
         <el-menu-item index="Explorer">
-          <RouterLink to="/Explorer" class="no-underline">Explorer</RouterLink> 
+          <a href="http://127.0.0.1:3030" class="no-underline">Explorer</a> 
         </el-menu-item>
         <el-sub-menu index="auth">
           <template #title>用户管理</template>
-          <el-menu-item index="Login">登录</el-menu-item>
-          <el-menu-item index="Register">注册</el-menu-item>
-          <el-menu-item index="LOgout">退出</el-menu-item>
+          <RouterLink :to="{name: 'login'}" class="no-underline" v-if="!userStore.isAuthenticated">
+            <el-menu-item index="Login">登录</el-menu-item>
+          </RouterLink>
+          <RouterLink :to="{name: 'register'}" class="no-underline" v-if="!userStore.isAuthenticated">
+            <el-menu-item index="Register">注册</el-menu-item>
+          </RouterLink>
+          <el-menu-item index="Logout" @click="Logout" v-if="userStore.isAuthenticated">退出</el-menu-item>
         </el-sub-menu>
       </el-menu>
       </el-header>
@@ -29,6 +35,10 @@
 
 <script setup lang="ts">
   import { RouterLink, RouterView } from 'vue-router';
+  import useUser from './hooks/useUser';
+  import { useUserStore } from './store/user';
+  const userStore = useUserStore();
+  let {Logout} = useUser();
 </script>
 
 <style>

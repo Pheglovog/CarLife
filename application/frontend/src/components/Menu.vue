@@ -11,30 +11,47 @@
         <el-icon><Ship /></el-icon>
         <span>配件供应</span>
         </template>
-        <el-menu-item index="CarTire">车轮</el-menu-item>
-        <el-menu-item index="CarBody">车身</el-menu-item>
-        <el-menu-item index="CarInterior">内饰</el-menu-item>
+        <RouterLink :to="{ name: 'carTires' }" class="no-underline">
+          <el-menu-item index="CarTire">车轮</el-menu-item>
+        </RouterLink>
+        <RouterLink :to="{ name: 'carBody' }" class="no-underline">
+          <el-menu-item index="CarBody">车身</el-menu-item>
+        </RouterLink>
+        <RouterLink :to="{ name: 'carInterior' }" class="no-underline">
+          <el-menu-item index="CarInterior">内饰</el-menu-item>
+        </RouterLink>
     </el-sub-menu>
+    <RouterLink :to="{ name: 'carMenu' }" class="no-underline">
     <el-menu-item index="Manufacture">
+      
         <el-icon><Van /></el-icon>
         <span>制造</span>
     </el-menu-item>
+    </RouterLink>
+    <RouterLink :to="{ name: 'carStore' }" class="no-underline">
     <el-menu-item index="Store">
         <el-icon><School /></el-icon>
         <span>销售</span>
     </el-menu-item>
+    </RouterLink>
+    <RouterLink :to="{ name: 'carMaint' }" class="no-underline">
     <el-menu-item index="Maintenancer">
         <el-icon><Setting /></el-icon>
         <span>维修</span>
     </el-menu-item>
+    </RouterLink>
+    <RouterLink :to="{ name: 'carInsure' }" class="no-underline">
     <el-menu-item index="Insure">
         <el-icon><Postcard /></el-icon>
         <span>保险</span>
     </el-menu-item>
+    </RouterLink>
+    <RouterLink :to="{ name: 'carRecord' }" class="no-underline">
     <el-menu-item index="Transfer">
         <el-icon><Switch /></el-icon>
         <span>转卖</span>
-    </el-menu-item>       
+    </el-menu-item>
+    </RouterLink>       
     </el-menu>
 </el-col>
 </template>
@@ -61,5 +78,9 @@ const handleClose = (key: string, keyPath: string[]) => {
 /* 让菜单占满整个 el-col 容器宽度 */
 .full-width-menu {
   width: 100%;
+}
+
+.no-underline{
+  text-decoration: none;
 }
 </style>

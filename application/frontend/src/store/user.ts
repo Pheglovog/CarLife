@@ -3,8 +3,10 @@ import { ref, computed } from 'vue';
 import axios from '../axios';
 import { reactive } from 'vue';
 import { ElMessage } from 'element-plus';
+import {useCarStore} from '../store/car';
 
 export const useUserStore = defineStore('user', ()=>{
+    const carStore = useCarStore()
     const userType = ref<string>('');
     let carList = reactive<string[]>([])
     const token = ref<string | null>(localStorage.getItem('token'));
@@ -44,6 +46,7 @@ export const useUserStore = defineStore('user', ()=>{
         userType.value='';
         carList=[];
         localStorage.removeItem('token');
+        carStore.cleanCar();
     }
 
     const flashCarList = async () => {

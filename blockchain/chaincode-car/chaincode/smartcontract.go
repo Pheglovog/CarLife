@@ -401,7 +401,7 @@ func (s *SmartContract) SetCarInsure(ctx contractapi.TransactionContextInterface
 }
 
 func (s *SmartContract) SetCarMaint(ctx contractapi.TransactionContextInterface, userID string,
-	carID string, part string, entent string, cost float32) (string, error) {
+	carID string, part string, extent string, cost float32) (string, error) {
 	//check permission
 	user, err := s.GetUser(ctx, userID)
 	if err != nil {
@@ -430,7 +430,7 @@ func (s *SmartContract) SetCarMaint(ctx contractapi.TransactionContextInterface,
 	maint := Maint{
 		Time:   time.Now(),
 		Part:   part,
-		Extent: entent,
+		Extent: extent,
 		Cost:   cost,
 		TxID:   txID,
 	}

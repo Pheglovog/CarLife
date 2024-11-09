@@ -8,8 +8,8 @@
         <el-row class="main-row">
         <!-- 左侧区域 -->
             <el-col :span="16" class="left-column">
-                <CarInfo></CarInfo>
-                <!-- <Welcome></Welcome> -->
+                <CarInfo v-if="userStore.isAuthenticated && carStore.carID != ''"></CarInfo>
+                <Welcome v-if="!userStore.isAuthenticated || carStore.carID == ''"></Welcome>
             </el-col>   
         <!-- 右侧区域（搜索框） -->
             <Search></Search>
@@ -24,6 +24,11 @@ import Menu from '../components/Menu.vue';
 import CarInfo from '../components/CarInfo.vue';
 import Search from '../components/Search.vue';
 import Welcome from '../components/Welcome.vue';
+import { useUserStore } from '../store/user';
+import { useCarStore } from '../store/car';
+
+const userStore = useUserStore();
+const carStore = useCarStore();
 </script>
 
 <style scoped>

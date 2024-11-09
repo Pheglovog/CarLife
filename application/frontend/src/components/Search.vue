@@ -1,8 +1,8 @@
 <template>
 <el-col :span="6">
     <div class="search-container">
-        <el-button type="primary" round>搜索</el-button>
-        <el-input placeholder="请输入搜索内容" class="search-input" />
+        <el-button type="primary" round @click="search">搜索</el-button>
+        <el-input placeholder="请输入搜索内容" class="search-input" v-model="carStore.carID"/>
     </div>
     <el-card style="max-width: 700px" >
         <template #header>
@@ -10,13 +10,20 @@
             <span>有关车辆</span>
         </div>
         </template>
-        <el-row>车辆id列表</el-row>
+        <el-row v-for="carId in userStore.carList" :key="carId"></el-row>
     </el-card>
 </el-col>
 </template>
 
 <script setup lang="ts">
+import { useCarStore } from '../store/car';
+import { useUserStore } from '../store/user';
+let carStore = useCarStore();
+let userStore = useUserStore();
 
+const search = () => {
+    carStore.getCar();
+}
 </script>
 
 <style>

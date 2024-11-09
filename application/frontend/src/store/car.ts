@@ -20,9 +20,15 @@ export const useCarStore = defineStore('car', ()=>{
             ElMessage.error('获取车辆信息失败');
         }
     }
+
+    const cleanCar = () => {
+        car.value = null;
+        carID.value = '';
+    }
     return {
         car,
         carID,
-        getCar
+        getCar,
+        cleanCar
     };
 })
