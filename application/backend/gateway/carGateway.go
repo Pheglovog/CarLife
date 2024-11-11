@@ -2,8 +2,10 @@ package gateway
 
 import (
 	"carlife-backend/model"
+	"context"
 	"crypto/x509"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -15,11 +17,14 @@ import (
 	"github.com/hyperledger/fabric-gateway/pkg/identity"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
+	"google.golang.org/grpc/status"
 )
 
-var GatewayMap = make(map[string]*client.Gateway)
+// var GatewayMap = make(map[string]*client.Gateway)
 var channel = "carchannel"
 var SmartContract = "carlife-chaincode-go"
+
+var orgMap = make(map[string]OrgConfig)
 
 type OrgConfig struct {
 	MSPID        string `json:"mspID"`
@@ -44,7 +49,6 @@ func loadOrgConfigs(filePath string) (map[string]OrgConfig, error) {
 		return nil, fmt.Errorf("failed to parse config file: %w", err)
 	}
 
-	orgMap := make(map[string]OrgConfig)
 	for _, org := range orgConfigs.Organizations {
 		orgMap[org.MSPID] = org
 	}
@@ -52,14 +56,14 @@ func loadOrgConfigs(filePath string) (map[string]OrgConfig, error) {
 }
 
 func InitGateways(configFilePath string) {
-	orgConfigs, err := loadOrgConfigs(configFilePath)
+	_, err := loadOrgConfigs(configFilePath)
 	if err != nil {
 		log.Fatalf("Failed to load org configs: %v", err)
 	}
 
-	for mspID, config := range orgConfigs {
-		GatewayMap[mspID] = newGateway(config)
-	}
+	// for mspID, config := range orgConfigs {
+	// 	GatewayMap[mspID] = newGateway(config)
+	// }
 }
 
 func readFirstFile(dirPath string) ([]byte, error) {
@@ -146,9 +150,9 @@ func newGateway(orgConfig OrgConfig) *client.Gateway {
 		id,
 		client.WithSign(sign),
 		client.WithClientConnection(clientConnection),
-		client.WithEvaluateTimeout(5*time.Second),
-		client.WithEndorseTimeout(15*time.Second),
-		client.WithSubmitTimeout(5*time.Second),
+		client.WithEvaluateTimeout(1*time.Minute),
+		client.WithEndorseTimeout(1*time.Minute),
+		client.WithSubmitTimeout(1*time.Minute),
 		client.WithCommitStatusTimeout(1*time.Minute),
 	)
 	if err != nil {
@@ -176,7 +180,8 @@ func RegisterUser(userID string, userType string, password string) (string, erro
 	default:
 		return "", fmt.Errorf("user type %s is not supported", userType)
 	}
-	gw := GatewayMap[mspID]
+	// gw := GatewayMap[mspID]
+	gw := newGateway(orgMap[mspID])
 	net := gw.GetNetwork(channel)
 	contract := net.GetContract(SmartContract)
 	_, commit, err := contract.SubmitAsync("RegisterUser", client.WithArguments(userID, userType, password))
@@ -192,25 +197,26 @@ func RegisterUser(userID string, userType string, password string) (string, erro
 }
 
 func GetUser(userID string) (string, error) {
-	gw := GatewayMap["StoreMSP"]
+	gw := newGateway(orgMap["StoreMSP"])
 	net := gw.GetNetwork(channel)
 	contract := net.GetContract(SmartContract)
 	result, err := contract.EvaluateTransaction("GetUser", userID)
-	return string(result), err
+	return string(result), CheckErr(err)
 }
 
 func GetCar(carID string) (string, error) {
-	gw := GatewayMap["StoreMSP"]
+	gw := newGateway(orgMap["StoreMSP"])
 	net := gw.GetNetwork(channel)
 	contract := net.GetContract(SmartContract)
 	result, err := contract.EvaluateTransaction("GetCar", carID)
-	return string(result), err
+	return string(result), CheckErr(err)
 }
 
 func SetCarTires(userID string, carID string, width float32, radius float32, workshop string) (string, error) {
-	gw := GatewayMap["ComponentSupplierMSP"]
+	gw := newGateway(orgMap["ComponentSupplierMSP"])
 	net := gw.GetNetwork(channel)
 	contract := net.GetContract(SmartContract)
+	fmt.Println("SetCarTires:", userID, carID, width, radius, workshop)
 	result, err := contract.SubmitTransaction(
 		"SetCarTires",
 		userID,
@@ -218,13 +224,14 @@ func SetCarTires(userID string, carID string, width float32, radius float32, wor
 		strconv.FormatFloat(float64(width), 'f', 2, 32),
 		strconv.FormatFloat(float64(radius), 'f', 2, 32),
 		workshop,
+		time.Now().Format(time.RFC3339),
 	)
-	return string(result), err
+	return string(result), CheckErr(err)
 }
 
 func SetCarBody(userID string, carID string, material string,
 	weitght float32, color string, workshop string) (string, error) {
-	gw := GatewayMap["ComponentSupplierMSP"]
+	gw := newGateway(orgMap["ComponentSupplierMSP"])
 	net := gw.GetNetwork(channel)
 	contract := net.GetContract(SmartContract)
 	result, err := contract.SubmitTransaction(
@@ -235,13 +242,14 @@ func SetCarBody(userID string, carID string, material string,
 		strconv.FormatFloat(float64(weitght), 'f', 2, 32),
 		color,
 		workshop,
+		time.Now().Format(time.RFC3339),
 	)
-	return string(result), err
+	return string(result), CheckErr(err)
 }
 
 func SetCarInterior(userID string, carID string, material string,
 	weitght float32, color string, workshop string) (string, error) {
-	gw := GatewayMap["ComponentSupplierMSP"]
+	gw := newGateway(orgMap["ComponentSupplierMSP"])
 	net := gw.GetNetwork(channel)
 	contract := net.GetContract(SmartContract)
 	result, err := contract.SubmitTransaction(
@@ -252,12 +260,13 @@ func SetCarInterior(userID string, carID string, material string,
 		strconv.FormatFloat(float64(weitght), 'f', 2, 32),
 		color,
 		workshop,
+		time.Now().Format(time.RFC3339),
 	)
-	return string(result), err
+	return string(result), CheckErr(err)
 }
 
 func SetCarManu(userID string, carID string, workshop string) (string, error) {
-	gw := GatewayMap["ManufacturerMSP"]
+	gw := newGateway(orgMap["ManufacturerMSP"])
 	net := gw.GetNetwork(channel)
 	contract := net.GetContract(SmartContract)
 	result, err := contract.SubmitTransaction(
@@ -265,13 +274,14 @@ func SetCarManu(userID string, carID string, workshop string) (string, error) {
 		userID,
 		carID,
 		workshop,
+		time.Now().Format(time.RFC3339),
 	)
-	return string(result), err
+	return string(result), CheckErr(err)
 }
 
 func SetCarStore(userID string, carID string, store string,
 	cost float32, ownerID string) (string, error) {
-	gw := GatewayMap["StoreMSP"]
+	gw := newGateway(orgMap["StoreMSP"])
 	net := gw.GetNetwork(channel)
 	contract := net.GetContract(SmartContract)
 	result, err := contract.SubmitTransaction(
@@ -281,13 +291,14 @@ func SetCarStore(userID string, carID string, store string,
 		store,
 		strconv.FormatFloat(float64(cost), 'f', 2, 32),
 		ownerID,
+		time.Now().Format(time.RFC3339),
 	)
-	return string(result), err
+	return string(result), CheckErr(err)
 }
 
 func SetCarInsure(userID string, carID string, name string,
 	cost float32, years int) (string, error) {
-	gw := GatewayMap["InsurerMSP"]
+	gw := newGateway(orgMap["InsurerMSP"])
 	net := gw.GetNetwork(channel)
 	contract := net.GetContract(SmartContract)
 	result, err := contract.SubmitTransaction(
@@ -297,13 +308,14 @@ func SetCarInsure(userID string, carID string, name string,
 		name,
 		strconv.FormatFloat(float64(cost), 'f', 2, 32),
 		strconv.Itoa(years),
+		time.Now().Format(time.RFC3339),
 	)
-	return string(result), err
+	return string(result), CheckErr(err)
 }
 
 func SetCarMaint(userID string, carID string, part string,
 	entent string, cost float32) (string, error) {
-	gw := GatewayMap["MaintenancerMSP"]
+	gw := newGateway(orgMap["MaintenancerMSP"])
 	net := gw.GetNetwork(channel)
 	contract := net.GetContract(SmartContract)
 	result, err := contract.SubmitTransaction(
@@ -313,12 +325,13 @@ func SetCarMaint(userID string, carID string, part string,
 		part,
 		entent,
 		strconv.FormatFloat(float64(cost), 'f', 2, 32),
+		time.Now().Format(time.RFC3339),
 	)
-	return string(result), err
+	return string(result), CheckErr(err)
 }
 
 func TransferCar(userID string, carID string, newUserID string, cost float32) (string, error) {
-	gw := GatewayMap["StoreMSP"]
+	gw := newGateway(orgMap["StoreMSP"])
 	net := gw.GetNetwork(channel)
 	contract := net.GetContract(SmartContract)
 	result, err := contract.SubmitTransaction(
@@ -327,6 +340,43 @@ func TransferCar(userID string, carID string, newUserID string, cost float32) (s
 		carID,
 		newUserID,
 		strconv.FormatFloat(float64(cost), 'f', 2, 32),
+		time.Now().Format(time.RFC3339),
 	)
-	return string(result), err
+	return string(result), CheckErr(err)
+}
+
+func CheckErr(err error) error {
+	var newErr error
+	if err != nil {
+		var endorseErr *client.EndorseError
+		var submitErr *client.SubmitError
+		var commitStatusErr *client.CommitStatusError
+		var commitErr *client.CommitError
+
+		if errors.As(err, &endorseErr) {
+			newErr = fmt.Errorf("Endorse error for transaction %s with gRPC status %v: %s\n", endorseErr.TransactionID, status.Code(endorseErr), endorseErr)
+		} else if errors.As(err, &submitErr) {
+			newErr = fmt.Errorf("Submit error for transaction %s with gRPC status %v: %s\n", submitErr.TransactionID, status.Code(submitErr), submitErr)
+		} else if errors.As(err, &commitStatusErr) {
+			if errors.Is(err, context.DeadlineExceeded) {
+				newErr = fmt.Errorf("Timeout waiting for transaction %s commit status: %s", commitStatusErr.TransactionID, commitStatusErr)
+			} else {
+				newErr = fmt.Errorf("Error obtaining commit status for transaction %s with gRPC status %v: %s\n", commitStatusErr.TransactionID, status.Code(commitStatusErr), commitStatusErr)
+			}
+		} else if errors.As(err, &commitErr) {
+			newErr = fmt.Errorf("Transaction %s failed to commit with status %d: %s\n", commitErr.TransactionID, int32(commitErr.Code), err)
+		} else {
+			newErr = fmt.Errorf("unexpected error type %T: %w", err, err)
+		}
+
+		// Any error that originates from a peer or orderer node external to the gateway will have its details
+		// embedded within the gRPC status error. The following code shows how to extract that.
+		statusErr := status.Convert(err)
+
+		details := statusErr.Details()
+		if len(details) > 0 {
+			fmt.Println("Error Details:%v", details)
+		}
+	}
+	return newErr
 }

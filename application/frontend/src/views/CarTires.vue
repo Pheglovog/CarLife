@@ -21,7 +21,7 @@
           <el-input v-model="carTires.workshop" />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="SetCarTires" style="margin-left: 125px;">
+          <el-button type="primary" @click="handleSubmit" style="margin-left: 125px;">
             提交
           </el-button>
         </el-form-item>
@@ -32,8 +32,30 @@
 <script setup lang="ts">
 import { reactive} from 'vue'
 import useCarTire from '../hooks/useCarTire';
-import type { FormRules } from 'element-plus'
+import { ElLoading ,ElMessage, type FormRules } from 'element-plus'
+
 let {carTires, SetCarTires} = useCarTire();
+
+let loadingInstance: any = null;
+const handleSubmit = async () => {
+  // 显示全屏loading
+  loadingInstance = ElLoading.service({
+    lock: true,
+    text: '提交中...',
+    background: 'rgba(0, 0, 0, 0.7)', // 设置背景透明度
+  })
+
+  try {
+    await SetCarTires()  // 执行实际的提交操作
+  } catch (error) {
+    ElMessage.error(error + '')
+  } finally {
+    // 提交完成后，移除loading
+    if (loadingInstance) {
+      loadingInstance.close()
+    }
+  }
+}
 
 const checkString = (rule: any, value: any, callback: any) => {
     if (typeof value !== 'string') {
@@ -49,10 +71,11 @@ const checkString = (rule: any, value: any, callback: any) => {
 }
 
 const checkNumber = (rule: any, value: any, callback: any) => {
-    if (typeof value !== 'number') {
+    const numValue = Number(value)
+    if (isNaN(numValue)) {
         return callback(new Error('请输入数字'))
     }
-    if (value <= 0) {
+    if (numValue <= 0) {
         return callback(new Error('请输入大于0的数字'))
     }
     callback()
@@ -65,7 +88,6 @@ const rules = reactive<FormRules<typeof carTires>>({
     workshop: [{ required: true, validator: checkString, trigger: 'blur' }]
 });
 
-
 </script>
 
 <style scoped>
@@ -76,5 +98,28 @@ const rules = reactive<FormRules<typeof carTires>>({
   height: 60vh;
   background-color: #f0f2f5;
 
+}
+
+.loading-content {
+  text-align: center;
+  padding: 30px;
+}
+
+.loading-icon {
+  font-size: 50px;
+  margin-bottom: 20px;
+}
+
+.el-dialog {
+  width: 200px;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
+}
+
+.el-dialog .el-dialog__body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

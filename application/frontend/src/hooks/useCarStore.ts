@@ -1,6 +1,6 @@
 import { reactive } from "vue";
 import { CarStore } from "../types/car";
-import axios from "axios";
+import axios from '../axios';
 import { ElMessage } from 'element-plus';
 
 export default function(){
@@ -25,7 +25,7 @@ export default function(){
             )
             ElMessage.success(`SetCarStore Success, CarID: ${response.data.carID}, TXID: ${response.data.txid}`)
         } catch (error) {
-            ElMessage.error('SetCarStore Error: ' + error)
+            throw new Error('SetCarStore Error: ' + error)
         }
     }
     

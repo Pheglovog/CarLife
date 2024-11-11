@@ -10,7 +10,7 @@
             <span>有关车辆</span>
         </div>
         </template>
-        <el-row v-for="carId in userStore.carList" :key="carId"></el-row>
+        <el-row v-for="(carId, index) in userStore.carList" :key="index">{{ carId }}</el-row>
     </el-card>
 </el-col>
 </template>

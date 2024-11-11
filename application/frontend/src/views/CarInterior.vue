@@ -24,7 +24,7 @@
           <el-input v-model="carInterior.workshop" />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="SetCarInterior" style="margin-left: 125px;">
+          <el-button type="primary" @click="handleSubmit" style="margin-left: 125px;">
             提交
           </el-button>
         </el-form-item>
@@ -35,9 +35,29 @@
 <script setup lang="ts">
 import { reactive} from 'vue'
 import useCarInterior from '../hooks/useCarInterior';
-import type { FormRules } from 'element-plus'
+import { ElLoading ,ElMessage, type FormRules } from 'element-plus'
 let {carInterior, SetCarInterior} = useCarInterior();
 
+let loadingInstance: any = null;
+const handleSubmit = async () => {
+  // 显示全屏loading
+  loadingInstance = ElLoading.service({
+    lock: true,
+    text: '提交中...',
+    background: 'rgba(0, 0, 0, 0.7)', // 设置背景透明度
+  })
+
+  try {
+    await SetCarInterior()  // 执行实际的提交操作
+  } catch (error) {
+    ElMessage.error(error + '')
+  } finally {
+    // 提交完成后，移除loading
+    if (loadingInstance) {
+      loadingInstance.close()
+    }
+  }
+}
 const checkString = (rule: any, value: any, callback: any) => {
     if (typeof value !== 'string') {
         return callback(new Error('请输入string'))
@@ -52,10 +72,11 @@ const checkString = (rule: any, value: any, callback: any) => {
 }
 
 const checkNumber = (rule: any, value: any, callback: any) => {
-    if (typeof value !== 'number') {
+    const numValue = Number(value)
+    if (isNaN(numValue)) {
         return callback(new Error('请输入数字'))
     }
-    if (value <= 0) {
+    if (numValue <= 0) {
         return callback(new Error('请输入大于0的数字'))
     }
     callback()

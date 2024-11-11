@@ -3,6 +3,7 @@ package chaincode
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/hyperledger/fabric-contract-api-go/contractapi"
@@ -62,7 +63,7 @@ func (s *SmartContract) GetCar(ctx contractapi.TransactionContextInterface, carI
 }
 
 func (s *SmartContract) SetCarTires(ctx contractapi.TransactionContextInterface, userID string,
-	carID string, width float32, radius float32, workshop string) (string, error) {
+	carID string, width float32, radius float32, workshop string, now time.Time) (string, error) {
 	//check permission
 	user, err := s.GetUser(ctx, userID)
 	if err != nil {
@@ -88,7 +89,7 @@ func (s *SmartContract) SetCarTires(ctx contractapi.TransactionContextInterface,
 	//change car information
 	txID := ctx.GetStub().GetTxID()
 	Cartires := CarTires{
-		Time:     time.Now(),
+		Time:     now,
 		Width:    width,
 		Radius:   radius,
 		Workshop: workshop,
@@ -120,11 +121,11 @@ func (s *SmartContract) SetCarTires(ctx contractapi.TransactionContextInterface,
 }
 
 func (s *SmartContract) SetCarBody(ctx contractapi.TransactionContextInterface, userID string,
-	carID string, material string, weitght float32, color string, workshop string) (string, error) {
+	carID string, material string, weitght float32, color string, workshop string, now time.Time) (string, error) {
 	//check permission
 	user, err := s.GetUser(ctx, userID)
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("failed to get user: %w, userID %s", err, userID)
 	}
 	if user == nil {
 		return "", errors.New("user not exist")
@@ -141,13 +142,13 @@ func (s *SmartContract) SetCarBody(ctx contractapi.TransactionContextInterface, 
 	}
 	err = ctx.GetStub().PutState(userID, userJson)
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("failed to put user: %w", err)
 	}
 
 	//change car information
 	txID := ctx.GetStub().GetTxID()
 	Carbody := CarBody{
-		Time:     time.Now(),
+		Time:     now,
 		Material: material,
 		Weitght:  weitght,
 		Color:    color,
@@ -174,13 +175,13 @@ func (s *SmartContract) SetCarBody(ctx contractapi.TransactionContextInterface, 
 	}
 	err = ctx.GetStub().PutState(carID, carJson)
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("failed to put car: %w", err)
 	}
 	return txID, nil
 }
 
 func (s *SmartContract) SetCarInterior(ctx contractapi.TransactionContextInterface, userID string,
-	carID string, material string, weitght float32, color string, workshop string) (string, error) {
+	carID string, material string, weitght float32, color string, workshop string, now time.Time) (string, error) {
 	//check permission
 	user, err := s.GetUser(ctx, userID)
 	if err != nil {
@@ -207,7 +208,7 @@ func (s *SmartContract) SetCarInterior(ctx contractapi.TransactionContextInterfa
 	//change car information
 	txID := ctx.GetStub().GetTxID()
 	Carinterior := CarInterior{
-		Time:     time.Now(),
+		Time:     now,
 		Material: material,
 		Weitght:  weitght,
 		Color:    color,
@@ -240,7 +241,7 @@ func (s *SmartContract) SetCarInterior(ctx contractapi.TransactionContextInterfa
 }
 
 func (s *SmartContract) SetCarManu(ctx contractapi.TransactionContextInterface, userID string,
-	carID string, workshop string) (string, error) {
+	carID string, workshop string, now time.Time) (string, error) {
 	//check permission
 	user, err := s.GetUser(ctx, userID)
 	if err != nil {
@@ -267,7 +268,7 @@ func (s *SmartContract) SetCarManu(ctx contractapi.TransactionContextInterface, 
 	//change car information
 	txID := ctx.GetStub().GetTxID()
 	Carmanu := CarManu{
-		Time:     time.Now(),
+		Time:     now,
 		Workshop: workshop,
 		TxID:     txID,
 	}
@@ -292,7 +293,7 @@ func (s *SmartContract) SetCarManu(ctx contractapi.TransactionContextInterface, 
 }
 
 func (s *SmartContract) SetCarStore(ctx contractapi.TransactionContextInterface, userID string,
-	carID string, store string, cost float32, ownerID string) (string, error) {
+	carID string, store string, cost float32, ownerID string, now time.Time) (string, error) {
 	//check permission
 	user, err := s.GetUser(ctx, userID)
 	if err != nil {
@@ -319,7 +320,7 @@ func (s *SmartContract) SetCarStore(ctx contractapi.TransactionContextInterface,
 	//change car information
 	txID := ctx.GetStub().GetTxID()
 	Carstore := CarStore{
-		Time:  time.Now(),
+		Time:  now,
 		Store: store,
 		Cost:  cost,
 		Owner: ownerID,
@@ -348,7 +349,7 @@ func (s *SmartContract) SetCarStore(ctx contractapi.TransactionContextInterface,
 
 func (s *SmartContract) SetCarInsure(ctx contractapi.TransactionContextInterface,
 	userID string, carID string, name string,
-	cost float32, years int) (string, error) {
+	cost float32, years int, now time.Time) (string, error) {
 	//check permission
 	user, err := s.GetUser(ctx, userID)
 	if err != nil {
@@ -376,8 +377,8 @@ func (s *SmartContract) SetCarInsure(ctx contractapi.TransactionContextInterface
 	insure := Insure{
 		Name:      name,
 		Cost:      cost,
-		BeginTime: time.Now(),
-		EndTime:   time.Now().AddDate(years, 0, 0),
+		BeginTime: now,
+		EndTime:   now.AddDate(years, 0, 0),
 		TxID:      txID,
 	}
 	var car Car
@@ -401,7 +402,7 @@ func (s *SmartContract) SetCarInsure(ctx contractapi.TransactionContextInterface
 }
 
 func (s *SmartContract) SetCarMaint(ctx contractapi.TransactionContextInterface, userID string,
-	carID string, part string, extent string, cost float32) (string, error) {
+	carID string, part string, extent string, cost float32, now time.Time) (string, error) {
 	//check permission
 	user, err := s.GetUser(ctx, userID)
 	if err != nil {
@@ -428,7 +429,7 @@ func (s *SmartContract) SetCarMaint(ctx contractapi.TransactionContextInterface,
 	//change car information
 	txID := ctx.GetStub().GetTxID()
 	maint := Maint{
-		Time:   time.Now(),
+		Time:   now,
 		Part:   part,
 		Extent: extent,
 		Cost:   cost,
@@ -455,7 +456,7 @@ func (s *SmartContract) SetCarMaint(ctx contractapi.TransactionContextInterface,
 }
 
 func (s *SmartContract) TransferCar(ctx contractapi.TransactionContextInterface, userID string,
-	carID string, newUserID string, cost float32) (string, error) {
+	carID string, newUserID string, cost float32, now time.Time) (string, error) {
 	//check permission
 	user, err := s.GetUser(ctx, userID)
 	if err != nil {
@@ -483,7 +484,7 @@ func (s *SmartContract) TransferCar(ctx contractapi.TransactionContextInterface,
 	record := Record{
 		OldUser: userID,
 		NewUser: newUserID,
-		Time:    time.Now(),
+		Time:    now,
 		Cost:    cost,
 		TxID:    txID,
 	}

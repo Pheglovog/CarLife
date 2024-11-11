@@ -26,9 +26,13 @@ import Search from '../components/Search.vue';
 import Welcome from '../components/Welcome.vue';
 import { useUserStore } from '../store/user';
 import { useCarStore } from '../store/car';
+import { onMounted } from 'vue';
 
 const userStore = useUserStore();
 const carStore = useCarStore();
+onMounted(() => {
+  userStore.flashCarList();
+});
 </script>
 
 <style scoped>

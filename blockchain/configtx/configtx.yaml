@@ -17,7 +17,7 @@ Organizations:
         Rule: "OR('ComponentSupplierMSP.admin', 'ComponentSupplierMSP.peer', 'ComponentSupplierMSP.client')"
       Writers:
         Type: Signature
-        Rule: "OR('ComponentSupplierMSP.member')"
+        Rule: "OR('ComponentSupplierMSP.member', 'ComponentSupplierMSP.client')"
       Admins:
         Type: Signature
         Rule: "OR('ComponentSupplierMSP.admin')"

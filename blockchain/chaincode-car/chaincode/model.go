@@ -26,10 +26,10 @@ type Car struct {
 	Interior CarInterior `json:"interior"`
 	Manu     CarManu     `json:"manu"`
 	Store    CarStore    `json:"store"`
-	Insure   CarInsure   `json:"insure"`
-	Maint    CarMaint    `json:"maint"`
+	Insure   *CarInsure  `json:"insure"`
+	Maint    *CarMaint   `json:"maint"`
 	Owner    string      `json:"owner"`
-	Record   CarRecord   `json:"record"`
+	Record   *CarRecord  `json:"record"`
 }
 
 type CarTires struct {

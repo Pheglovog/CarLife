@@ -4,12 +4,14 @@ import (
 	"carlife-backend/gateway"
 	"carlife-backend/model"
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
 func GetCar(ctx *gin.Context) {
+	fmt.Printf("ctx.Query(\"carID\"): %v\n", ctx.Query("carID"))
 	res, err := gateway.GetCar(ctx.Query("carID"))
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -44,10 +46,10 @@ func GetCarList(ctx *gin.Context) {
 
 func SetCarTires(ctx *gin.Context) {
 	var input struct {
-		CarID    string  `json:"carID"`
-		Width    float32 `json:"width"`
-		Radius   float32 `json:"radius"`
-		Workshop string  `json:"workshop"`
+		CarID    string  `form:"carID"`
+		Width    float32 `form:"width"`
+		Radius   float32 `form:"radius"`
+		Workshop string  `form:"workshop"`
 	}
 	if err := ctx.ShouldBind(&input); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -74,11 +76,11 @@ func SetCarTires(ctx *gin.Context) {
 
 func SetCarBody(ctx *gin.Context) {
 	var input struct {
-		CarID    string  `json:"carID"`
-		Material string  `json:"material"`
-		Weitght  float32 `json:"weitght"`
-		Color    string  `json:"color"`
-		Workshop string  `json:"workshop"`
+		CarID    string  `form:"carID"`
+		Material string  `form:"material"`
+		Weitght  float32 `form:"weitght"`
+		Color    string  `form:"color"`
+		Workshop string  `form:"workshop"`
 	}
 	if err := ctx.ShouldBind(&input); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -106,11 +108,11 @@ func SetCarBody(ctx *gin.Context) {
 
 func SetCarInterior(ctx *gin.Context) {
 	var input struct {
-		CarID    string  `json:"carID"`
-		Material string  `json:"material"`
-		Weitght  float32 `json:"weitght"`
-		Color    string  `json:"color"`
-		Workshop string  `json:"workshop"`
+		CarID    string  `form:"carID"`
+		Material string  `form:"material"`
+		Weitght  float32 `form:"weitght"`
+		Color    string  `form:"color"`
+		Workshop string  `form:"workshop"`
 	}
 	if err := ctx.ShouldBind(&input); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -138,8 +140,8 @@ func SetCarInterior(ctx *gin.Context) {
 
 func SetCarManu(ctx *gin.Context) {
 	var input struct {
-		CarID    string `json:"carID"`
-		Workshop string `json:"workshop"`
+		CarID    string `form:"carID"`
+		Workshop string `form:"workshop"`
 	}
 	if err := ctx.ShouldBind(&input); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -164,10 +166,10 @@ func SetCarManu(ctx *gin.Context) {
 
 func SetCarStore(ctx *gin.Context) {
 	var input struct {
-		CarID   string  `json:"carID"`
-		Store   string  `json:"store"`
-		Cost    float32 `json:"cost"`
-		OwnerID string  `json:"ownerID"`
+		CarID   string  `form:"carID"`
+		Store   string  `form:"store"`
+		Cost    float32 `form:"cost"`
+		OwnerID string  `form:"ownerID"`
 	}
 	if err := ctx.ShouldBind(&input); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -194,10 +196,10 @@ func SetCarStore(ctx *gin.Context) {
 
 func SetCarInsure(ctx *gin.Context) {
 	var input struct {
-		CarID string  `json:"carID"`
-		Name  string  `json:"name"`
-		Cost  float32 `json:"cost"`
-		Years int     `json:"years"`
+		CarID string  `form:"carID"`
+		Name  string  `form:"name"`
+		Cost  float32 `form:"cost"`
+		Years int     `form:"years"`
 	}
 	if err := ctx.ShouldBind(&input); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -224,10 +226,10 @@ func SetCarInsure(ctx *gin.Context) {
 
 func SetCarMaint(ctx *gin.Context) {
 	var input struct {
-		CarID  string  `json:"carID"`
-		Part   string  `json:"part"`
-		Extent string  `json:"extent"`
-		Cost   float32 `json:"cost"`
+		CarID  string  `form:"carID"`
+		Part   string  `form:"part"`
+		Extent string  `form:"extent"`
+		Cost   float32 `form:"cost"`
 	}
 	if err := ctx.ShouldBind(&input); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -254,9 +256,9 @@ func SetCarMaint(ctx *gin.Context) {
 
 func TransferCar(ctx *gin.Context) {
 	var input struct {
-		CarID      string  `json:"carID"`
-		NewOwnerID string  `json:"newOwnerID"`
-		Cost       float32 `json:"cost"`
+		CarID      string  `form:"carID"`
+		NewOwnerID string  `form:"newOwnerID"`
+		Cost       float32 `form:"cost"`
 	}
 	if err := ctx.ShouldBind(&input); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
