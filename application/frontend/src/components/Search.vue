@@ -2,11 +2,13 @@
 <el-col :span="6">
     <div class="search-container">
         <el-button type="primary" round @click="search">搜索</el-button>
+        <!-- <el-button type="primary" round @click="carStore.setCar">搜索</el-button> -->
         <el-input placeholder="请输入搜索内容" class="search-input" v-model="carStore.carID"/>
     </div>
     <el-card style="max-width: 700px" >
         <template #header>
         <div class="card-header">
+            <el-button type="primary" round @click="flashCarList">刷新</el-button>
             <span>有关车辆</span>
         </div>
         </template>
@@ -21,6 +23,11 @@ import { useUserStore } from '../store/user';
 let carStore = useCarStore();
 let userStore = useUserStore();
 
+const flashCarList = () => {
+    if (userStore.isAuthenticated) {
+    userStore.flashCarList();
+  }
+}
 const search = () => {
     carStore.getCar();
 }

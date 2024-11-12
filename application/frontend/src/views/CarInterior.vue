@@ -14,9 +14,6 @@
         <el-form-item label="内饰材料" prop="material">
           <el-input v-model="carInterior.material" />
         </el-form-item>
-        <el-form-item label="内饰重量" prop="weight">
-          <el-input v-model="carInterior.weight" />
-        </el-form-item>
         <el-form-item label="内饰颜色" prop="color">
           <el-input v-model="carInterior.color" />
         </el-form-item>

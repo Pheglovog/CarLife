@@ -78,7 +78,7 @@ func SetCarBody(ctx *gin.Context) {
 	var input struct {
 		CarID    string  `form:"carID"`
 		Material string  `form:"material"`
-		Weitght  float32 `form:"weitght"`
+		Weight   float32 `form:"weight"`
 		Color    string  `form:"color"`
 		Workshop string  `form:"workshop"`
 	}
@@ -86,12 +86,13 @@ func SetCarBody(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+	fmt.Println("Gin:", input)
 	userID, _ := ctx.Get("userID")
 	res, err := gateway.SetCarBody(
 		userID.(string),
 		input.CarID,
 		input.Material,
-		input.Weitght,
+		input.Weight,
 		input.Color,
 		input.Workshop,
 	)

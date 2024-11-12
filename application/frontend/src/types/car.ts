@@ -5,12 +5,23 @@ export interface Car{
     interior: CarInterior
     manu: CarManu
     store: CarStore
-    insure: CarInsure[]
-    maint: CarMaint[]
-    record: TransferRecord[]
+    insure: Insures|null
+    maint: Maints|null
+    record: Records|null
     owner: string
 }
 
+export interface Insures{
+    insures: CarInsure[]
+}
+
+export interface Maints {
+    maints: CarMaint[]
+}
+
+export interface Records{
+    records: TransferRecord[]
+}
 
 export interface CarTires{
     carID?: string
@@ -51,7 +62,7 @@ export interface CarStore{
     carID?: string
     store: string
     cost: number
-    ownerID: string
+    owner: string
     time?: Date
     txID?: string    
 }
@@ -77,8 +88,8 @@ export interface CarMaint{
 
 export interface TransferRecord{
     carID?: string
-    NewUser: string
-    OldUser?: string
+    newUser: string
+    oldUser?: string
     cost: number
     time?: Date
     txID?: string 

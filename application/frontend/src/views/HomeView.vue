@@ -8,8 +8,9 @@
         <el-row class="main-row">
         <!-- 左侧区域 -->
             <el-col :span="16" class="left-column">
-                <CarInfo v-if="userStore.isAuthenticated && carStore.carID != ''"></CarInfo>
-                <Welcome v-if="!userStore.isAuthenticated || carStore.carID == ''"></Welcome>
+                <!-- <CarInfo v-if="userStore.isAuthenticated && carStore.carID != ''"></CarInfo>
+                <Welcome v-if="!userStore.isAuthenticated || carStore.carID == ''"></Welcome> -->
+                <CarInfo></CarInfo>
             </el-col>   
         <!-- 右侧区域（搜索框） -->
             <Search></Search>
@@ -30,9 +31,11 @@ import { onMounted } from 'vue';
 
 const userStore = useUserStore();
 const carStore = useCarStore();
-onMounted(() => {
-  userStore.flashCarList();
-});
+// onMounted(() => {
+//   if (userStore.isAuthenticated) {
+//     userStore.flashCarList();
+//   }
+// });
 </script>
 
 <style scoped>
