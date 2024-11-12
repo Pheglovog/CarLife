@@ -32,7 +32,7 @@
     const ruleFormRef = ref<FormInstance>()
     let {user, Login} = useUser()
     
-    const checkName = (rule: any, value: any, callback: any) => {
+    const checkName = (_: any, value: any, callback: any) => {
         if (typeof value !== 'string') {
             return callback(new Error('用户名必须为字符串'))
         }
@@ -44,7 +44,7 @@
         }
         callback()
     }
-    const validatePass = (rule: any, value: any, callback: any) => {
+    const validatePass = (_: any, value: any, callback: any) => {
       if (value === '') {
         return callback(new Error('请输入密码'))
       } 

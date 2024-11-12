@@ -8,7 +8,7 @@ export default function(){
         carID: '',
         store: '',
         cost: 0,
-        ownerID: ''
+        owner: ''
     })
     
     async function SetCarStore() {
@@ -16,7 +16,7 @@ export default function(){
         formData.append('carID', carStore.carID as string)
         formData.append('store', carStore.store)
         formData.append('cost', carStore.cost.toString())
-        formData.append('ownerID', carStore.ownerID)
+        formData.append('ownerID', carStore.owner)
         try {
             const response = await axios.post(
                 '/SetCarStore',

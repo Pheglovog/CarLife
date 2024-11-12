@@ -12,7 +12,7 @@
           <RouterLink :to="{name: 'home'}" class="no-underline">CarLife</RouterLink>
         </el-menu-item>
         <el-menu-item index="Explorer">
-          <a href="http://127.0.0.1:3030" class="no-underline">Explorer</a> 
+          <a href="http://101.34.73.4:3030" class="no-underline">Explorer</a> 
         </el-menu-item>
         <el-sub-menu index="auth">
           <template #title>用户管理</template>

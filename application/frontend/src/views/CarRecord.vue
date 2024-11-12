@@ -12,7 +12,7 @@
           <el-input v-model="transferRecord.carID" />
         </el-form-item>
         <el-form-item label="买车人" prop="NewUser">
-          <el-input v-model="transferRecord.NewUser" />
+          <el-input v-model="transferRecord.newUser" />
         </el-form-item>
         <el-form-item label="花费" prop="cost">
           <el-input v-model="transferRecord.cost" />
@@ -52,7 +52,7 @@ const handleSubmit = async () => {
     }
   }
 }
-const checkString = (rule: any, value: any, callback: any) => {
+const checkString = (_: any, value: any, callback: any) => {
     if (typeof value !== 'string') {
         return callback(new Error('请输入string'))
     }
@@ -65,7 +65,7 @@ const checkString = (rule: any, value: any, callback: any) => {
     callback()
 }
 
-const checkNumber = (rule: any, value: any, callback: any) => {
+const checkNumber = (_: any, value: any, callback: any) => {
     const numValue = Number(value)
     if (isNaN(numValue)) {
         return callback(new Error('请输入数字'))
@@ -78,7 +78,7 @@ const checkNumber = (rule: any, value: any, callback: any) => {
 
 const rules = reactive<FormRules<typeof transferRecord>>({
     carID: [{ required: true, validator: checkString, trigger: 'blur' }],
-    NewUser: [{ required: true, validator: checkString, trigger: 'blur' }],
+    newUser: [{ required: true, validator: checkString, trigger: 'blur' }],
     cost: [{ required: true, validator: checkNumber, trigger: 'blur' }],
 });
 

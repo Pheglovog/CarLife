@@ -42,7 +42,7 @@ import useUser from '../hooks/useUser'
 const ruleFormRef = ref<FormInstance>()
 let {user, Register} = useUser()
 
-const checkName = (rule: any, value: any, callback: any) => {
+const checkName = (_: any, value: any, callback: any) => {
     if (typeof value !== 'string') {
         return callback(new Error('用户名必须为字符串'))
     }
@@ -54,7 +54,7 @@ const checkName = (rule: any, value: any, callback: any) => {
     }
     callback()
 }
-const validatePass = (rule: any, value: any, callback: any) => {
+const validatePass = (_: any, value: any, callback: any) => {
   if (value === '') {
     return callback(new Error('请输入密码'))
   } 
@@ -63,7 +63,7 @@ const validatePass = (rule: any, value: any, callback: any) => {
   }
   callback()
 }
-const checkUserType = (rule: any, value: any, callback: any) => {
+const checkUserType = (_: any, value: any, callback: any) => {
   if (value === '') {
     return callback(new Error('请输入用户类型'))
   }
