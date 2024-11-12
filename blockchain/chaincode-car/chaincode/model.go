@@ -43,7 +43,7 @@ type CarTires struct {
 type CarBody struct {
 	Time     time.Time `json:"time"`
 	Material string    `json:"material"`
-	Weitght  float32   `json:"weitght"`
+	Weight   float32   `json:"weight"`
 	Color    string    `json:"color"`
 	Workshop string    `json:"workshop"`
 	TxID     string    `json:"txID"`
@@ -52,7 +52,7 @@ type CarBody struct {
 type CarInterior struct {
 	Time     time.Time `json:"time"`
 	Material string    `json:"material"`
-	Weitght  float32   `json:"weitght"`
+	Weight   float32   `json:"weight"`
 	Color    string    `json:"color"`
 	Workshop string    `json:"workshop"`
 	TxID     string    `json:"txID"`
@@ -97,7 +97,7 @@ type Maint struct {
 }
 
 type CarRecord struct {
-	Records []Record `json:"record"`
+	Records []Record `json:"records"`
 }
 
 type Record struct {

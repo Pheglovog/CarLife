@@ -76,16 +76,17 @@ func (s *SmartContract) SetCarTires(ctx contractapi.TransactionContextInterface,
 		return "", errors.New("only component supplier can set car tires")
 	}
 	//change user information
-	user.CarList = append(user.CarList, carID)
-	userJson, err := json.Marshal(user)
-	if err != nil {
-		return "", err
+	if !contains(user.CarList, carID) {
+		user.CarList = append(user.CarList, carID)
+		userJson, err := json.Marshal(user)
+		if err != nil {
+			return "", err
+		}
+		err = ctx.GetStub().PutState(userID, userJson)
+		if err != nil {
+			return "", err
+		}
 	}
-	err = ctx.GetStub().PutState(userID, userJson)
-	if err != nil {
-		return "", err
-	}
-
 	//change car information
 	txID := ctx.GetStub().GetTxID()
 	Cartires := CarTires{
@@ -121,7 +122,7 @@ func (s *SmartContract) SetCarTires(ctx contractapi.TransactionContextInterface,
 }
 
 func (s *SmartContract) SetCarBody(ctx contractapi.TransactionContextInterface, userID string,
-	carID string, material string, weitght float32, color string, workshop string, now time.Time) (string, error) {
+	carID string, material string, weight float32, color string, workshop string, now time.Time) (string, error) {
 	//check permission
 	user, err := s.GetUser(ctx, userID)
 	if err != nil {
@@ -135,14 +136,16 @@ func (s *SmartContract) SetCarBody(ctx contractapi.TransactionContextInterface, 
 	}
 
 	//change user information
-	user.CarList = append(user.CarList, carID)
-	userJson, err := json.Marshal(user)
-	if err != nil {
-		return "", err
-	}
-	err = ctx.GetStub().PutState(userID, userJson)
-	if err != nil {
-		return "", fmt.Errorf("failed to put user: %w", err)
+	if !contains(user.CarList, carID) {
+		user.CarList = append(user.CarList, carID)
+		userJson, err := json.Marshal(user)
+		if err != nil {
+			return "", err
+		}
+		err = ctx.GetStub().PutState(userID, userJson)
+		if err != nil {
+			return "", fmt.Errorf("failed to put user: %w", err)
+		}
 	}
 
 	//change car information
@@ -150,7 +153,7 @@ func (s *SmartContract) SetCarBody(ctx contractapi.TransactionContextInterface, 
 	Carbody := CarBody{
 		Time:     now,
 		Material: material,
-		Weitght:  weitght,
+		Weight:   weight,
 		Color:    color,
 		Workshop: workshop,
 		TxID:     txID,
@@ -181,7 +184,7 @@ func (s *SmartContract) SetCarBody(ctx contractapi.TransactionContextInterface, 
 }
 
 func (s *SmartContract) SetCarInterior(ctx contractapi.TransactionContextInterface, userID string,
-	carID string, material string, weitght float32, color string, workshop string, now time.Time) (string, error) {
+	carID string, material string, weight float32, color string, workshop string, now time.Time) (string, error) {
 	//check permission
 	user, err := s.GetUser(ctx, userID)
 	if err != nil {
@@ -195,22 +198,23 @@ func (s *SmartContract) SetCarInterior(ctx contractapi.TransactionContextInterfa
 	}
 
 	//change user information
-	user.CarList = append(user.CarList, carID)
-	userJson, err := json.Marshal(user)
-	if err != nil {
-		return "", err
+	if !contains(user.CarList, carID) {
+		user.CarList = append(user.CarList, carID)
+		userJson, err := json.Marshal(user)
+		if err != nil {
+			return "", err
+		}
+		err = ctx.GetStub().PutState(userID, userJson)
+		if err != nil {
+			return "", err
+		}
 	}
-	err = ctx.GetStub().PutState(userID, userJson)
-	if err != nil {
-		return "", err
-	}
-
 	//change car information
 	txID := ctx.GetStub().GetTxID()
 	Carinterior := CarInterior{
 		Time:     now,
 		Material: material,
-		Weitght:  weitght,
+		Weight:   weight,
 		Color:    color,
 		Workshop: workshop,
 		TxID:     txID,
@@ -255,16 +259,17 @@ func (s *SmartContract) SetCarManu(ctx contractapi.TransactionContextInterface, 
 	}
 
 	//change user information
-	user.CarList = append(user.CarList, carID)
-	userJson, err := json.Marshal(user)
-	if err != nil {
-		return "", err
+	if !contains(user.CarList, carID) {
+		user.CarList = append(user.CarList, carID)
+		userJson, err := json.Marshal(user)
+		if err != nil {
+			return "", err
+		}
+		err = ctx.GetStub().PutState(userID, userJson)
+		if err != nil {
+			return "", err
+		}
 	}
-	err = ctx.GetStub().PutState(userID, userJson)
-	if err != nil {
-		return "", err
-	}
-
 	//change car information
 	txID := ctx.GetStub().GetTxID()
 	Carmanu := CarManu{
@@ -279,6 +284,10 @@ func (s *SmartContract) SetCarManu(ctx contractapi.TransactionContextInterface, 
 	}
 	if carJson == nil {
 		return "", errors.New("car not exist")
+	}
+	err = json.Unmarshal(carJson, &car)
+	if err != nil {
+		return "", err
 	}
 	car.Manu = Carmanu
 	carJson, err = json.Marshal(car)
@@ -307,14 +316,35 @@ func (s *SmartContract) SetCarStore(ctx contractapi.TransactionContextInterface,
 	}
 
 	//change user information
-	user.CarList = append(user.CarList, carID)
-	userJson, err := json.Marshal(user)
+	if !contains(user.CarList, carID) {
+		user.CarList = append(user.CarList, carID)
+		userJson, err := json.Marshal(user)
+		if err != nil {
+			return "", err
+		}
+		err = ctx.GetStub().PutState(userID, userJson)
+		if err != nil {
+			return "", err
+		}
+	}
+
+	owner, err := s.GetUser(ctx, ownerID)
 	if err != nil {
 		return "", err
 	}
-	err = ctx.GetStub().PutState(userID, userJson)
-	if err != nil {
-		return "", err
+	if owner == nil {
+		return "", errors.New("owner not exist")
+	}
+	if !contains(owner.CarList, carID) {
+		owner.CarList = append(owner.CarList, carID)
+		ownerJson, err := json.Marshal(owner)
+		if err != nil {
+			return "", err
+		}
+		err = ctx.GetStub().PutState(ownerID, ownerJson)
+		if err != nil {
+			return "", err
+		}
 	}
 
 	//change car information
@@ -333,6 +363,10 @@ func (s *SmartContract) SetCarStore(ctx contractapi.TransactionContextInterface,
 	}
 	if carJson == nil {
 		return "", errors.New("car not exist")
+	}
+	err = json.Unmarshal(carJson, &car)
+	if err != nil {
+		return "", err
 	}
 	car.Store = Carstore
 	car.Owner = ownerID
@@ -362,14 +396,16 @@ func (s *SmartContract) SetCarInsure(ctx contractapi.TransactionContextInterface
 		return "", errors.New("only insurer can set car insure")
 	}
 	//change user information
-	user.CarList = append(user.CarList, carID)
-	userJson, err := json.Marshal(user)
-	if err != nil {
-		return "", err
-	}
-	err = ctx.GetStub().PutState(userID, userJson)
-	if err != nil {
-		return "", err
+	if !contains(user.CarList, carID) {
+		user.CarList = append(user.CarList, carID)
+		userJson, err := json.Marshal(user)
+		if err != nil {
+			return "", err
+		}
+		err = ctx.GetStub().PutState(userID, userJson)
+		if err != nil {
+			return "", err
+		}
 	}
 
 	//change car information
@@ -388,6 +424,13 @@ func (s *SmartContract) SetCarInsure(ctx contractapi.TransactionContextInterface
 	}
 	if carJson == nil {
 		return "", errors.New("car not exist")
+	}
+	err = json.Unmarshal(carJson, &car)
+	if err != nil {
+		return "", err
+	}
+	if car.Insure == nil {
+		car.Insure = &CarInsure{}
 	}
 	car.Insure.Insures = append(car.Insure.Insures, insure)
 	carJson, err = json.Marshal(car)
@@ -416,16 +459,17 @@ func (s *SmartContract) SetCarMaint(ctx contractapi.TransactionContextInterface,
 	}
 
 	//change user information
-	user.CarList = append(user.CarList, carID)
-	userJson, err := json.Marshal(user)
-	if err != nil {
-		return "", err
+	if !contains(user.CarList, carID) {
+		user.CarList = append(user.CarList, carID)
+		userJson, err := json.Marshal(user)
+		if err != nil {
+			return "", err
+		}
+		err = ctx.GetStub().PutState(userID, userJson)
+		if err != nil {
+			return "", err
+		}
 	}
-	err = ctx.GetStub().PutState(userID, userJson)
-	if err != nil {
-		return "", err
-	}
-
 	//change car information
 	txID := ctx.GetStub().GetTxID()
 	maint := Maint{
@@ -442,6 +486,13 @@ func (s *SmartContract) SetCarMaint(ctx contractapi.TransactionContextInterface,
 	}
 	if carJson == nil {
 		return "", errors.New("car not exist")
+	}
+	err = json.Unmarshal(carJson, &car)
+	if err != nil {
+		return "", err
+	}
+	if car.Maint == nil {
+		car.Maint = &CarMaint{}
 	}
 	car.Maint.Maints = append(car.Maint.Maints, maint)
 	carJson, err = json.Marshal(car)
@@ -489,6 +540,9 @@ func (s *SmartContract) TransferCar(ctx contractapi.TransactionContextInterface,
 		TxID:    txID,
 	}
 	car.Owner = newUserID
+	if car.Record == nil {
+		car.Record = &CarRecord{}
+	}
 	car.Record.Records = append(car.Record.Records, record)
 	carJson, err := json.Marshal(car)
 	if err != nil {
@@ -500,14 +554,32 @@ func (s *SmartContract) TransferCar(ctx contractapi.TransactionContextInterface,
 	}
 
 	//change user information
-	user.CarList = append(user.CarList, carID)
-	userJson, err := json.Marshal(user)
+	newUser, err := s.GetUser(ctx, newUserID)
 	if err != nil {
 		return "", err
 	}
-	err = ctx.GetStub().PutState(userID, userJson)
-	if err != nil {
-		return "", err
+	if newUser == nil {
+		return "", errors.New("newUser not exist")
+	}
+	if !contains(newUser.CarList, carID) {
+		newUser.CarList = append(newUser.CarList, carID)
+		userJson, err := json.Marshal(newUser)
+		if err != nil {
+			return "", err
+		}
+		err = ctx.GetStub().PutState(newUserID, userJson)
+		if err != nil {
+			return "", err
+		}
 	}
 	return txID, nil
+}
+
+func contains(slice []string, str string) bool {
+	for _, v := range slice {
+		if v == str {
+			return true
+		}
+	}
+	return false
 }
