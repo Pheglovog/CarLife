@@ -6,14 +6,14 @@ import {ElMessage} from 'element-plus';
 export default function(){
     let transferRecord = reactive<TransferRecord>({
         carID: '',
-        NewUser: '',
+        newUser: '',
         cost: 0,
     })
 
     async function SetTransferRecord() {
         const formData = new URLSearchParams();
         formData.append('carID', transferRecord.carID as string)
-        formData.append('newOwnerID', transferRecord.NewUser)
+        formData.append('newOwnerID', transferRecord.newUser)
         formData.append('cost', transferRecord.cost.toString())
         try {
             const response = await axios.post(

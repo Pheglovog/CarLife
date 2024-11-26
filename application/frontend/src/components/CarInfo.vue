@@ -209,7 +209,7 @@ function formatTime(time: Date | undefined): string {
   return '';
 }
 
-const formatDate = (row: any, column: any, cellValue: any) => {
+const formatDate = (_: any, __: any, cellValue: any) => {
       if (!cellValue) return '';  // 如果时间为空，返回空字符串
       return dayjs(cellValue).format('YYYY-MM-DD HH:mm');  // 格式化时间为 'YYYY-MM-DD HH:mm:ss'
 };

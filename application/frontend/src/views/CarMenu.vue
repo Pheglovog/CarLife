@@ -49,7 +49,7 @@ const handleSubmit = async () => {
     }
   }
 }
-const checkString = (rule: any, value: any, callback: any) => {
+const checkString = (_: any, value: any, callback: any) => {
     if (typeof value !== 'string') {
         return callback(new Error('请输入string'))
     }
@@ -58,17 +58,6 @@ const checkString = (rule: any, value: any, callback: any) => {
     }
     if (value.length < 3) {
         return callback(new Error('string长度不能小于3'))
-    }
-    callback()
-}
-
-const checkNumber = (rule: any, value: any, callback: any) => {
-    const numValue = Number(value)
-    if (isNaN(numValue)) {
-        return callback(new Error('请输入数字'))
-    }
-    if (numValue <= 0) {
-        return callback(new Error('请输入大于0的数字'))
     }
     callback()
 }

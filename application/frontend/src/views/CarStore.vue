@@ -18,7 +18,7 @@
           <el-input v-model="carStore.cost" />
         </el-form-item>
         <el-form-item label="车主" prop="ownerID">
-          <el-input v-model="carStore.ownerID" />
+          <el-input v-model="carStore.owner" />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="handleSubmit" style="margin-left: 125px;">
@@ -54,7 +54,7 @@ const handleSubmit = async () => {
     }
   }
 }
-const checkString = (rule: any, value: any, callback: any) => {
+const checkString = (_: any, value: any, callback: any) => {
     if (typeof value !== 'string') {
         return callback(new Error('请输入string'))
     }
@@ -67,7 +67,7 @@ const checkString = (rule: any, value: any, callback: any) => {
     callback()
 }
 
-const checkNumber = (rule: any, value: any, callback: any) => {
+const checkNumber = (_: any, value: any, callback: any) => {
     const numValue = Number(value)
     if (isNaN(numValue)) {
         return callback(new Error('请输入数字'))
@@ -82,7 +82,7 @@ const rules = reactive<FormRules<typeof carStore>>({
     carID: [{ required: true, validator: checkString, trigger: 'blur' }],
     store: [{ required: true, validator: checkString, trigger: 'blur' }],
     cost: [{ required: true, validator: checkNumber, trigger: 'blur' }],
-    ownerID: [{ required: true, validator: checkString, trigger: 'blur' }],
+    owner: [{ required: true, validator: checkString, trigger: 'blur' }],
 });
 </script>
 

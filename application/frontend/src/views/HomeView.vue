@@ -24,13 +24,11 @@
 import Menu from '../components/Menu.vue';
 import CarInfo from '../components/CarInfo.vue';
 import Search from '../components/Search.vue';
-import Welcome from '../components/Welcome.vue';
-import { useUserStore } from '../store/user';
-import { useCarStore } from '../store/car';
-import { onMounted } from 'vue';
+// import { useUserStore } from '../store/user';
+// import { useCarStore } from '../store/car';
 
-const userStore = useUserStore();
-const carStore = useCarStore();
+// const userStore = useUserStore();
+// const carStore = useCarStore();
 // onMounted(() => {
 //   if (userStore.isAuthenticated) {
 //     userStore.flashCarList();
